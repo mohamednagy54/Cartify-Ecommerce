@@ -105,11 +105,11 @@ const Footer = () => {
         <div className="flex  flex-wrap gap-8">
           <div className="">
             <span className="text-gray-500 mr-4">Language</span>
-            <span className="font-medium">Egypt | English</span>
+            <span className="font-medium">English</span>
           </div>
           <div className="">
             <span className="text-gray-500 mr-4">Currency</span>
-            <span className="font-medium">$ USD</span>
+            <span className="font-medium">EGP</span>
           </div>
         </div>
       </div>
