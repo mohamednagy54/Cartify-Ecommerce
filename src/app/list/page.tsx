@@ -3,13 +3,14 @@ import React, { Suspense } from "react";
 import SkeletonCards from "../_Components/SkeletonCards";
 import ProductList from "../_Components/ProductList";
 import Filteration from "../_Components/Filteration";
+import SearchBar from "../_Components/SearchBar";
 
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: { category?: string };
+  searchParams: any;
 }) {
-  const categoryId =  searchParams?.category;
+  const { category: categoryId, q: searchVal } = await searchParams;
 
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative pt-25">
@@ -35,11 +36,17 @@ export default async function ProductsPage({
       {/* Filter */}
       <Filteration />
 
+      <SearchBar />
+
       <h1 className="mt-12 text-xl font-semibold">All Products For You!</h1>
       {/* Products */}
 
       <Suspense fallback={<SkeletonCards />}>
-        <ProductList categoryId={categoryId} filterType="updatedAt" />
+        <ProductList
+          useContext={true}
+          categoryId={categoryId}
+          searchParams={searchVal}
+        />
       </Suspense>
     </div>
   );

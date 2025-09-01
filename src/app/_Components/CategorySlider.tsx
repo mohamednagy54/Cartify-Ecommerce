@@ -43,16 +43,17 @@ export default function CategorySlider({
                 href={`/list?category=${cat._id}`}
                 onClick={(e) => handleClick(e)}
               >
-                <div className="relative bg-slate-100 w-full h-[400px]">
+                <div className="relative bg-slate-100 w-full h-[280px] md:h-[340px]">
                   <Image
                     src={cat.image}
                     alt={cat.name}
                     fill
                     sizes="25vw"
-                    className="object-cover"
+                    className="object-cover rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
                   />
+                  
                 </div>
-                <h1 className="mt-4 font-light text-xl tracking-wide">
+                <h1 className="mt-3 text-lg font-semibold tracking-wide text-center">
                   {cat.name}
                 </h1>
               </Link>

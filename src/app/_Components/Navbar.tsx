@@ -72,7 +72,7 @@ const Navbar = () => {
       {/* Right */}
 
       <div className=" items-center justify-between gap-8 hidden lg:flex">
-        <SearchBar />
+        
         <NavIcons />
       </div>
 

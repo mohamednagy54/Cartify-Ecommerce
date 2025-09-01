@@ -1,13 +1,18 @@
 "use client";
 
+import { useAppContext } from "@/context/appContext";
+import { ProductType } from "@/types/products.type";
 import React, { useState } from "react";
 
 interface QtyProps {
   qty: number;
+  product: ProductType;
 }
 
-export default function AddQty({ qty }: QtyProps) {
+export default function AddQty({ qty, product }: QtyProps) {
   const [quantity, setQuantity] = useState(1);
+
+  const { addToCart } = useAppContext();
 
   function handleQty(type: "i" | "d") {
     if (type === "d" && quantity > 1) {
@@ -56,6 +61,7 @@ export default function AddQty({ qty }: QtyProps) {
         <button
           className="w-36 text-sm rounded-3xl ring-1 ring-[#F35C7A] text-[#F35C7A]  py-2 px-4 hover:bg-[#F35C7A] hover:text-white disabled:cursor-not-allowed disabled:bg-pink-200 disabled:ring-0 disabled:text-white disabled:ring-none cursor-pointer"
           disabled={qty === 0}
+          onClick={() => addToCart(product, quantity)}
         >
           Add to Cart
         </button>

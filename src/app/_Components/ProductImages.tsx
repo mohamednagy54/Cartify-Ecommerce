@@ -31,21 +31,23 @@ export default function ProductImages({ images }: ProductImagesProps) {
   const [index, setIndex] = useState(0);
 
   return (
-    <div className="">
-      <div className="relative h-[470px]">
+    <div className="flex flex-col gap-6">
+      <div className="relative h-[470px] rounded-2xl overflow-hidden shadow-xl">
         <Image
           src={images[index]}
           alt=""
           fill
           sizes="50vw"
-          className="object-contain rounded-md"
+          className="object-contain hover:scale-105 transition-transform duration-500"
         />
       </div>
 
-      <div className="flex justify-between flex-wrap gap-4 mt-4">
+      <div className="flex flex-wrap gap-4 overflow-hidden p-2">
         {images.map((item: string, i: number) => (
           <div
-            className="w-1/4 h-32 relative gap-4 mt-4 cursor-pointer"
+            className={`relative w-28 h-28 rounded-xl overflow-hidden border 
+              ${index === i ? "border-pink-500" : "border-gray-300"} 
+              hover:scale-110 transition-transform duration-300`}
             key={i}
             onClick={() => setIndex(i)}
           >

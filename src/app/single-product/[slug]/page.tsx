@@ -82,7 +82,7 @@ export default async function SingleProductPage({
         <RatingStars rating={ratingsAverage} />
 
         {/* Add Quantitiy */}
-        <AddQty qty={quantity || 0} />
+        <AddQty qty={quantity || 0} product={data.data} />
 
         <div className="h-[2px] bg-gray-100" />
         {/* Additional info */}
@@ -119,9 +119,7 @@ export default async function SingleProductPage({
             <Reviews />
           </Suspense>
         ) : (
-          <p className="text-gray-500 text-sm">
-            No Reviews To Show
-          </p>
+          <p className="text-gray-500 text-sm">No Reviews To Show</p>
         )}
       </div>
     </div>

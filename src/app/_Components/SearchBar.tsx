@@ -1,29 +1,27 @@
+"use client";
 
-"use client"
-
+import { useAppContext } from "@/context/appContext";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+
 import React from "react";
 
 export default function SearchBar() {
-  const router = useRouter();
+  const { setSearchValue } = useAppContext();
 
   function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const name = formData.get("name") as string;
-    console.log(name);
 
-    if (name) {
-      router.push(`/list?`);
-    }
+    const name = (formData.get("name") as string) || "";
+
+    setSearchValue(name);
   }
 
   return (
     <form
-      onSubmit={handleSearch}
-      className="flex items-center justify-between gap-4 bg-gray-100 p-2 rounded-md flex-1"
+      onChange={handleSearch}
+      className="flex items-center justify-between gap-4 bg-gray-100 p-2 rounded-md flex-1 mt-8"
     >
       <input
         type="text"

@@ -9,12 +9,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 
+
 export default function Filteration() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
   
+  
+
   function handleFilterChange(value: string, name?: string) {
-    console.log(name, value);
+    console.log(name, value); 
+    const params = new URLSearchParams(searchParams);
+    
+    if (name) {
+      params.set(name, value);
+      replace(`${pathname}?${params.toString()}`);
+    }
+    
+    
+
   }
 
   return (
@@ -70,6 +87,8 @@ export default function Filteration() {
           </SelectContent>
         </Select>
       </div>
+
+      
 
       {/* Sort by */}
 
