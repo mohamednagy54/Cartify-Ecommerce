@@ -18,8 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
-  const LoginSchema = zod.object({
+export default function ForgetPasswordPage() {
+  const ResetPasswordSchema = zod.object({
     email: zod
       .email("Invalid email")
       .nonempty("Email is Required")
@@ -27,26 +27,22 @@ export default function LoginPage() {
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
         "Email must be in the format: example@domain.com"
       ),
-
-    password: zod
-      .string()
-      .nonempty("Password is Required")
-      .min(6, "Password must be at least 6 characters"),
   });
 
-  const LoginForm = useForm({
+  const ResetForm = useForm({
     defaultValues: {
       email: "",
-      password: "",
     },
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(ResetPasswordSchema),
   });
 
   const router = useRouter();
 
-  async function handleLogin(formData: zod.infer<typeof LoginSchema>) {
+  async function handleResetPassword(
+    formData: zod.infer<typeof ResetPasswordSchema>
+  ) {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/signin`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/forgotPasswords`,
       {
         method: "POST",
         headers: {
@@ -58,10 +54,10 @@ export default function LoginPage() {
 
     const data = await res.json();
 
-    if (data.message === "success") {
-      toast.success("Login successful", { position: "top-right" });
+    if (data.statusMsg === "success") {
+      toast.success("Reset code sent to your email", { position: "top-right" });
 
-      router.push("/");
+      router.push("/forget-password/verify-code");
     } else {
       toast.error(data.message || "There was an error, please try again", {
         position: "top-right",
@@ -72,16 +68,16 @@ export default function LoginPage() {
   return (
     <div className="mt-32 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex items-center justify-center">
       <div className="w-full max-w-md">
-        <h1 className="text-2xl font-semibold mb-6">Login</h1>
+        <h1 className="text-2xl font-semibold mb-6">Reset Your Password</h1>
 
-        <Form {...LoginForm}>
+        <Form {...ResetForm}>
           <form
-            onSubmit={LoginForm.handleSubmit(handleLogin)}
+            onSubmit={ResetForm.handleSubmit(handleResetPassword)}
             className="space-y-4"
           >
             {/* Email */}
             <FormField
-              control={LoginForm.control}
+              control={ResetForm.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
@@ -100,52 +96,20 @@ export default function LoginPage() {
                 </FormItem>
               )}
             />
-            {/* Password */}
-            <FormField
-              control={LoginForm.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm text-gray-700">
-                    Password
-                  </FormLabel>
-                  <FormControl className="">
-                    <Input
-                      placeholder="***********"
-                      {...field}
-                      type="password"
-                      className="ring-2 ring-gray-300 rounded-md p-4 focus:ring-2 focus:ring-[#F35C7A] focus:outline-none border-0"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
             <Button
               type="submit"
               className="w-full bg-[#F35C7A] hover:bg-[#d94c68]"
             >
-              Login
+              Reset
             </Button>
           </form>
         </Form>
 
         {/* Link to login */}
         <div className="mt-4 text-center">
-          <Link
-            href="/register"
-            className="text-sm text-gray-600 hover:underline"
-          >
-            Dont Have an account?{" "}
-            <span className="text-[#F35C7A]">Register</span>
-          </Link>
-          <br />
-          <Link
-            href="/forget-password"
-            className="text-sm text-gray-600 hover:underline"
-          >
-            Forget Password ?
+          <Link href="/login" className="text-sm text-gray-600 hover:underline">
+            Go back to Login
           </Link>
         </div>
       </div>

@@ -32,8 +32,6 @@ export default function ProductListClient({
     ? products
     : initialProducts;
 
-  console.log(filtered);
-
   if (!filtered || filtered.length === 0) {
     return (
       <div className="text-center py-20 text-gray-500">
@@ -113,7 +111,7 @@ export default function ProductListClient({
 
             <button
               className="rounded-2xl w-max ring-1 ring-[#F35C7A] text-[#F35C7A] py-2 px-4 text-xs cursor-pointer hover:bg-[#F35C7A] hover:text-white transition-colors"
-              onClick={() => addToCart(product,1)}
+              onClick={() => addToCart(product, 1)}
             >
               Add to Cart
             </button>

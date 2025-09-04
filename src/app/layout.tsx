@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./_Components/Navbar";
 import Footer from "./_Components/Footer";
 import { AppProvider } from "@/context/appContext";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,13 +20,14 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} overflow-x-hidden`}>
         <AppProvider>
           <Navbar />
 
           {children}
 
           <Footer />
+          <Toaster richColors />
         </AppProvider>
       </body>
     </html>

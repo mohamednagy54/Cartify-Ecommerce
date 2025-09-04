@@ -18,8 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
-  const LoginSchema = zod.object({
+export default function ResetPasswordPage() {
+  const ResetPasswordSchema = zod.object({
     email: zod
       .email("Invalid email")
       .nonempty("Email is Required")
@@ -28,27 +28,29 @@ export default function LoginPage() {
         "Email must be in the format: example@domain.com"
       ),
 
-    password: zod
+    newPassword: zod
       .string()
       .nonempty("Password is Required")
       .min(6, "Password must be at least 6 characters"),
   });
 
-  const LoginForm = useForm({
+  const ResetForm = useForm({
     defaultValues: {
       email: "",
-      password: "",
+      newPassword: "",
     },
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(ResetPasswordSchema),
   });
 
   const router = useRouter();
 
-  async function handleLogin(formData: zod.infer<typeof LoginSchema>) {
+  async function handleResetPassword(
+    formData: zod.infer<typeof ResetPasswordSchema>
+  ) {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/signin`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/resetPassword`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -57,11 +59,10 @@ export default function LoginPage() {
     );
 
     const data = await res.json();
-
-    if (data.message === "success") {
-      toast.success("Login successful", { position: "top-right" });
-
-      router.push("/");
+ 
+    if (data.token) {
+      toast.success("Reset Completed!", { position: "top-right" });
+      router.push("/login");
     } else {
       toast.error(data.message || "There was an error, please try again", {
         position: "top-right",
@@ -72,16 +73,16 @@ export default function LoginPage() {
   return (
     <div className="mt-32 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex items-center justify-center">
       <div className="w-full max-w-md">
-        <h1 className="text-2xl font-semibold mb-6">Login</h1>
+        <h1 className="text-2xl font-semibold mb-6">Reset Now!</h1>
 
-        <Form {...LoginForm}>
+        <Form {...ResetForm}>
           <form
-            onSubmit={LoginForm.handleSubmit(handleLogin)}
+            onSubmit={ResetForm.handleSubmit(handleResetPassword)}
             className="space-y-4"
           >
             {/* Email */}
             <FormField
-              control={LoginForm.control}
+              control={ResetForm.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
@@ -102,12 +103,12 @@ export default function LoginPage() {
             />
             {/* Password */}
             <FormField
-              control={LoginForm.control}
-              name="password"
+              control={ResetForm.control}
+              name="newPassword"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm text-gray-700">
-                    Password
+                    New Password
                   </FormLabel>
                   <FormControl className="">
                     <Input
@@ -126,28 +127,10 @@ export default function LoginPage() {
               type="submit"
               className="w-full bg-[#F35C7A] hover:bg-[#d94c68]"
             >
-              Login
+              Reset Password
             </Button>
           </form>
         </Form>
-
-        {/* Link to login */}
-        <div className="mt-4 text-center">
-          <Link
-            href="/register"
-            className="text-sm text-gray-600 hover:underline"
-          >
-            Dont Have an account?{" "}
-            <span className="text-[#F35C7A]">Register</span>
-          </Link>
-          <br />
-          <Link
-            href="/forget-password"
-            className="text-sm text-gray-600 hover:underline"
-          >
-            Forget Password ?
-          </Link>
-        </div>
       </div>
     </div>
   );
