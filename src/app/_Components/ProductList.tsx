@@ -16,7 +16,7 @@ export default async function ProductList({
   searchParams,
   filterType,
   categoryId,
-  useContext = false
+  useContext = false,
 }: ProductListProps) {
   const queryParams = new URLSearchParams();
   if (limit) queryParams.append("limit", limit.toString());

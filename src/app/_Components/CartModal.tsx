@@ -1,16 +1,24 @@
 "use client";
 
+import { getAllCartItems, removeItemFromCart } from "@/CartActions/CartActions";
 import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/context/appContext";
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
+import React, { useEffect } from "react";
 
 export default function CartModal() {
-  const { cart } = useAppContext();
+  const { cart, handleRemoveItem } = useAppContext();
 
   function handleCheckout() {}
 
-  if (cart.length === 0) {
+  function turncateText(text: string, maxChars: number) {
+    if (text.length <= maxChars) return text;
+
+    return text.slice(0, maxChars) + "...";
+  }
+
+  if (!cart || !cart.data || cart?.data.products.length === 0) {
     return (
       <div className="w-max absolute top-14 right-0 p-4 bg-white rounded-md shadow-md z-20">
         <h2 className="text-xl mb-2">Shopping Cart</h2>
@@ -24,20 +32,17 @@ export default function CartModal() {
       {/* <div className="">Cart is Empty</div> */}
       <h2 className="text-xl">Shopping Cart</h2>
       {/* List */}
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4 max-h-80 overflow-y-auto scrollbar-custom">
         {/* Item */}
-        {cart.map((item) => {
+        {cart?.data.products.map((item) => {
           const {
-            _id,
-            imageCover,
-            title,
+            product: { imageCover, title, _id: productId },
             price,
-            priceAfterDiscount,
-            quantity,
+            count,
           } = item;
 
           return (
-            <div className="flex gap-4" key={_id}>
+            <div className="flex gap-4 my-2" key={productId}>
               <Image
                 src={imageCover}
                 alt="product"
@@ -51,11 +56,11 @@ export default function CartModal() {
                 <div className="">
                   {/* Title */}
                   <div className="flex items-center justify-between gap-8">
-                    <h3 className="font-semibold max-w-[200px]">{title}</h3>
+                    <h3 className="font-semibold max-w-[200px]">
+                      {turncateText(title, 50)}
+                    </h3>
                     <div className="p-1 bg-gray-50 rounded-sm flex items-center gap-2">
-                      {priceAfterDiscount && priceAfterDiscount > 0
-                        ? priceAfterDiscount
-                        : price}
+                      {price}
                       <span>EGP</span>
                     </div>
                   </div>
@@ -66,9 +71,16 @@ export default function CartModal() {
                 </div>
 
                 {/* Bottom */}
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-500">Qty. {quantity}</span>
-                  <span className="text-blue-500 cursor-pointer">Remove</span>
+                <div className="flex justify-between items-center text-sm pt-2">
+                  <span className="text-gray-700 font-medium">
+                    Qty. {count}
+                  </span>
+                  <span
+                    className="text-blue-500 cursor-pointer"
+                    onClick={() => handleRemoveItem(productId)}
+                  >
+                    Remove
+                  </span>
                 </div>
               </div>
             </div>
@@ -80,7 +92,11 @@ export default function CartModal() {
       <div className="">
         <div className="flex items-center justify-between font-bold">
           <span className="">Subtotal</span>
-          <span className="">$54</span>
+          <span className="">
+            {cart?.data.totalCartPrice
+              ? `${cart.data.totalCartPrice} EGP`
+              : "0 EGP"}
+          </span>
         </div>
         <p className="text-gray-500 text-sm mt-2 mb-4">
           Shipping and taxes calculated at checkout.
@@ -88,9 +104,13 @@ export default function CartModal() {
 
         {/* Btns */}
         <div className="flex justify-between items-center">
-          <Button variant="outline">View Cart</Button>
+          <Link href="/cart">
+            <Button variant="outline" className="cursor-pointer">
+              View Cart
+            </Button>
+          </Link>
           <Button
-            className="bg-black disabled:cursor-not-allowed disabled:opacity-75"
+            className="bg-black disabled:cursor-not-allowed disabled:opacity-75 cursor-pointer"
             onClick={handleCheckout}
           >
             Checkout

@@ -56,6 +56,7 @@ export default function ForgetPasswordPage() {
 
     if (data.statusMsg === "success") {
       toast.success("Reset code sent to your email", { position: "top-right" });
+      localStorage.setItem("resetEmail", formData.email);
 
       router.push("/forget-password/verify-code");
     } else {

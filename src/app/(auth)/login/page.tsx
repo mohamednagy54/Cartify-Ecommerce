@@ -17,6 +17,7 @@ import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   const LoginSchema = zod.object({
@@ -44,29 +45,21 @@ export default function LoginPage() {
 
   const router = useRouter();
 
-  async function handleLogin(formData: zod.infer<typeof LoginSchema>) {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/signin`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+  async function handleLogin(values: zod.infer<typeof LoginSchema>) {
+    const res = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
 
-    const data = await res.json();
-
-    if (data.message === "success") {
-      toast.success("Login successful", { position: "top-right" });
-
+    if (res?.ok) {
+      toast.success("Login successful");
       router.push("/");
     } else {
-      toast.error(data.message || "There was an error, please try again", {
-        position: "top-right",
-      });
+      toast.error(res?.error || "Invalid credentials");
     }
+
+    
   }
 
   return (

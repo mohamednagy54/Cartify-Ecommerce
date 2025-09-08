@@ -10,8 +10,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import React from "react";
+
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,10 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 export default function ResetPasswordPage() {
+  useEffect(() => {
+    localStorage.removeItem("resetEmail");
+  }, []);
+
   const ResetPasswordSchema = zod.object({
     email: zod
       .email("Invalid email")
@@ -59,9 +63,10 @@ export default function ResetPasswordPage() {
     );
 
     const data = await res.json();
- 
+
     if (data.token) {
       toast.success("Reset Completed!", { position: "top-right" });
+      localStorage.removeItem("resetEmail");
       router.push("/login");
     } else {
       toast.error(data.message || "There was an error, please try again", {

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
@@ -6,19 +6,14 @@ import { MenuIcon, MountainIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import SearchBar from "./SearchBar";
+
 import NavIcons from "./NavIcons";
-
-
-
+import { useAppContext } from "@/context/appContext";
+import { useSession } from "next-auth/react";
 
 const Navbar = () => {
-
-
-
-  function handleLogout() { 
-
-  }
+  const { handleLoggingOut, cart } = useAppContext();
+  const { data: session, status } = useSession();
 
   return (
     <header className="fixed top-0 left-0 z-50 flex h-20 w-full justify-between items-center px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-white shadow-md">
@@ -46,34 +41,33 @@ const Navbar = () => {
             Shop
           </Link>
           <Link
-            href="#"
+            href="/cart"
             className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
             prefetch={false}
           >
-            Deals
+            Cart
           </Link>
           <Link
-            href="#"
+            href="/whishlist"
             className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
             prefetch={false}
           >
-            About
+            Whishlist
           </Link>
-          <Link
+          {/* <Link
             href="#"
             className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
             prefetch={false}
           >
             Contact
-          </Link>
+          </Link> */}
         </nav>
       </div>
 
       {/* Right */}
 
       <div className=" items-center justify-between gap-8 hidden lg:flex">
-        
-        <NavIcons />
+        <NavIcons status={status} />
       </div>
 
       <Sheet>
@@ -103,40 +97,29 @@ const Navbar = () => {
               Shop
             </Link>
             <Link
-              href="#"
+              href="/cart"
               className="w-full py-2 text-xl font-semibold"
               prefetch={false}
             >
-              Deals
+              Cart {cart?.data.products.length ?? 0}
             </Link>
-            <Link
-              href="#"
-              className="w-full py-2 text-xl font-semibold"
-              prefetch={false}
-            >
-              About
-            </Link>
-            <Link
-              href="#"
-              className="w-full py-2 text-xl font-semibold"
-              prefetch={false}
-            >
-              Contact
-            </Link>
-            <Button
-              onClick={handleLogout}
-              className="w-full py-2 text-xl font-semibold bg-transparent"
-            >
-              Logout
-            </Button>
 
             <Link
-              href="#"
+              href="/wishlist"
               className="w-full py-2 text-xl font-semibold"
               prefetch={false}
             >
-              Cart (2)
+              Wishlist
             </Link>
+
+            {status === "authenticated" && (
+              <Button
+                onClick={handleLoggingOut}
+                className="w-full py-2 text-xl font-semibold bg-transparent"
+              >
+                Logout
+              </Button>
+            )}
           </div>
         </SheetContent>
       </Sheet>

@@ -1,0 +1,51 @@
+"use client";
+
+import { BrandType } from "@/types/brand.type";
+import Image from "next/image";
+import React from "react";
+import Slider from "react-slick";
+
+export default function BrandsSlider({ brands }: { brands: BrandType[] }) {
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+
+    responsive: [
+      { breakpoint: 1024, settings: { slidesToShow: 3 } },
+      { breakpoint: 768, settings: { slidesToShow: 2 } },
+      { breakpoint: 480, settings: { slidesToShow: 1 } },
+    ],
+    arrows: false,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
+  return (
+    <div className="py-6  ">
+      {brands.length > 0 && (
+        <Slider {...settings} className="">
+          {brands.map((brand: BrandType) => (
+            <div key={brand._id} className="mx-3">
+              <div className="flex items-center justify-center p-6 border bg-white   transition-transform hover:scale-105 cursor-pointer">
+                <div className="relative w-36 h-16  bg-white transition-transform hover:scale-105 cursor-pointer">
+                  <Image
+                    src={brand.image}
+                    alt={brand.name}
+                    fill
+                    sizes="(max-width: 480px) 100vw,
+                            (max-width: 768px) 50vw,
+                            (max-width: 1024px) 33vw,
+                                                25vw"
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </Slider>
+      )}
+    </div>
+  );
+}

@@ -48,14 +48,45 @@ export default function VerifyCodePage() {
     );
 
     const data = await res.json();
-   
-    
 
     if (data.status === "Success") {
       toast.success("Verification Successfull", { position: "top-right" });
+      localStorage.removeItem("resetEmail");
       router.push("/forget-password/reset-password");
     } else {
       toast.error(data.message || "There was an error, please try again", {
+        position: "top-right",
+      });
+    }
+  }
+
+  async function handleResendCode() {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/forgotPasswords`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({ email: localStorage.getItem("resetEmail") }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.statusMsg === "success") {
+        toast.success("New reset code sent to your email", {
+          position: "top-right",
+        });
+      } else {
+        toast.error(data.message || "Failed to resend code", {
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.", {
         position: "top-right",
       });
     }
@@ -90,6 +121,14 @@ export default function VerifyCodePage() {
                 </FormItem>
               )}
             />
+
+            <button
+              type="button"
+              onClick={handleResendCode}
+              className="text-gray-500 text-sm hover:underline cursor-pointer"
+            >
+              Resend Code
+            </button>
 
             <Button
               type="submit"

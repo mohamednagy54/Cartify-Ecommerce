@@ -123,5 +123,24 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 2px; 
+  height: 2px; 
+}
 
+::-webkit-scrollbar-track {
+  background: #f0f0f0; 
+  border-radius: 8px;
+}
 
+::-webkit-scrollbar-thumb {
+  background-color: #443f41; 
+  border-radius: 8px;
+  border: 2px solid #f0f0f0; 
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin; 
+  scrollbar-color: #443f41 #f0f0f0; 
+}
