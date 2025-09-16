@@ -16,7 +16,7 @@ const Navbar = () => {
   const { data: session, status } = useSession();
 
   return (
-    <header className="fixed top-0 left-0 z-50 flex h-20 w-full justify-between items-center px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-white shadow-md">
+    <header className="fixed top-0 left-0 z-50 flex py-4 w-full justify-between items-center px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-40 bg-white shadow-md">
       {/* Left */}
       <div className="flex items-center gap-12">
         {/* Logo */}
@@ -48,11 +48,18 @@ const Navbar = () => {
             Cart
           </Link>
           <Link
-            href="/whishlist"
+            href="/wishlist"
             className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
             prefetch={false}
           >
-            Whishlist
+            Wishlist
+          </Link>
+          <Link
+            href="/allorders"
+            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+            prefetch={false}
+          >
+            Orders
           </Link>
           {/* <Link
             href="#"
@@ -101,7 +108,7 @@ const Navbar = () => {
               className="w-full py-2 text-xl font-semibold"
               prefetch={false}
             >
-              Cart {cart?.data.products.length ?? 0}
+              Cart ({cart?.data.products.length ?? 0})
             </Link>
 
             <Link
@@ -110,6 +117,13 @@ const Navbar = () => {
               prefetch={false}
             >
               Wishlist
+            </Link>
+            <Link
+              href="/allorders"
+              className="w-full py-2 text-xl font-semibold"
+              prefetch={false}
+            >
+              Orders
             </Link>
 
             {status === "authenticated" && (

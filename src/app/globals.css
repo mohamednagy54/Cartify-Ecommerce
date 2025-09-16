@@ -78,6 +78,11 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Modern shadows */
+  --shadow-elegant: 0 25px 50px -12px hsl(0 0% 0% / 0.25);
+  --shadow-card: 0 10px 30px -10px hsl(0 0% 0% / 0.1);
+  --shadow-glow: 0 0 40px hsl(346 85% 59% / 0.4);
 }
 
 .dark {
@@ -124,23 +129,23 @@
 }
 
 ::-webkit-scrollbar {
-  width: 2px; 
-  height: 2px; 
+  width: 2px;
+  height: 2px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f0f0f0; 
+  background: #f0f0f0;
   border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #443f41; 
+  background-color: #443f41;
   border-radius: 8px;
-  border: 2px solid #f0f0f0; 
+  border: 2px solid #f0f0f0;
 }
 
 /* Firefox */
 * {
-  scrollbar-width: thin; 
-  scrollbar-color: #443f41 #f0f0f0; 
+  scrollbar-width: thin;
+  scrollbar-color: #443f41 #f0f0f0;
 }

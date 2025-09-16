@@ -10,6 +10,7 @@ import {
 } from "@/CartActions/CartActions";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function CategoryPage() {
   const [loadingProductId, setLoadingProductId] = React.useState<string | null>(
@@ -65,7 +66,7 @@ export default function CategoryPage() {
   }
 
   return (
-    <div className="px-4 py-12 md:px-8 lg:px-16 xl:px-32 2xl:px-64 mt-[90px]">
+    <div className="px-4 py-12 md:px-8 lg:px-16 xl:px-32 2xl:px-40 ">
       <h1 className="text-3xl font-bold mb-6">
         Shopping Cart
         <span className="text-[#F35C7A] ml-2">
@@ -160,9 +161,11 @@ export default function CategoryPage() {
             >
               <span>Clear Cart</span>
             </button>
-            <Button className="bg-black px-6 py-2 disabled:cursor-not-allowed disabled:opacity-75">
-              Checkout
-            </Button>
+            <Link href="/checkout">
+              <Button className="bg-black px-6 py-2 disabled:cursor-not-allowed disabled:opacity-75">
+                Checkout
+              </Button>
+            </Link>
           </div>
         ))}
     </div>

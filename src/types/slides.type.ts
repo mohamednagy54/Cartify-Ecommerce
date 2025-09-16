@@ -6,4 +6,6 @@ export interface slidesType {
   url: string;
   bg: string;
   reverse: boolean;
+  buttonText: string;
+  subtitle: string;
 }

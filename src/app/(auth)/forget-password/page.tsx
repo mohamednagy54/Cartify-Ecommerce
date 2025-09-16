@@ -45,10 +45,10 @@ export default function ForgetPasswordPage() {
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/auth/forgotPasswords`,
       {
         method: "POST",
+        body: JSON.stringify(formData),
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
       }
     );
 
@@ -67,7 +67,7 @@ export default function ForgetPasswordPage() {
   }
 
   return (
-    <div className="mt-32 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 flex items-center justify-center">
+    <div className="mt-32 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-40 flex items-center justify-center">
       <div className="w-full max-w-md">
         <h1 className="text-2xl font-semibold mb-6">Reset Your Password</h1>
 

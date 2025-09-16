@@ -23,7 +23,7 @@ export default async function RootLayout({
       <body className={`${inter.className} overflow-x-hidden`}>
         <Providers>
           <Navbar />
-          {children}
+          <main className="min-h-screen">{children}</main>
           <Footer />
         </Providers>
       </body>

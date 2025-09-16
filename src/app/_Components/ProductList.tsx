@@ -2,6 +2,7 @@ import { ProductType } from "@/types/products.type";
 
 import React from "react";
 import ProductListClient from "./ProductListClient";
+import ProductListGrid from "./ProductListGrid";
 
 interface ProductListProps {
   limit?: number;
@@ -9,6 +10,7 @@ interface ProductListProps {
   searchParams?: string;
   categoryId?: string;
   useContext?: boolean;
+  variant?: "default" | "grid"
 }
 
 export default async function ProductList({
@@ -17,6 +19,7 @@ export default async function ProductList({
   filterType,
   categoryId,
   useContext = false,
+  variant = "default"
 }: ProductListProps) {
   const queryParams = new URLSearchParams();
   if (limit) queryParams.append("limit", limit.toString());
@@ -37,10 +40,20 @@ export default async function ProductList({
   const products: ProductType[] = data.data || [];
 
   return (
-    <ProductListClient
-      initialProducts={products}
-      search={searchParams}
-      useContext={useContext}
-    />
+    <>
+      {variant === "grid" ? (
+        <ProductListGrid
+          initialProducts={products}
+          search={searchParams}
+          useContext={useContext}
+        />
+      ) : (
+        <ProductListClient
+          initialProducts={products}
+          search={searchParams}
+          useContext={useContext}
+        />
+      )}
+    </>
   );
 }

@@ -35,32 +35,31 @@ export default function CategorySlider({
 
   return (
     <div className="px-4">
-      <div className="">
-        <Slider {...settings}>
-          {categories.map((cat) => (
-            <div key={cat._id} className="px-3">
-              <Link
-                href={`/list?category=${cat._id}`}
-                onClick={(e) => handleClick(e)}
-              >
-                <div className="relative bg-slate-100 w-full h-[280px] md:h-[340px]">
-                  <Image
-                    src={cat.image}
-                    alt={cat.name}
-                    fill
-                    sizes="25vw"
-                    className="object-cover rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300"
-                  />
-                  
-                </div>
-                <h1 className="mt-3 text-lg font-semibold tracking-wide text-center">
+      <Slider {...settings}>
+        {categories.map((cat) => (
+          <div key={cat._id} className="px-3">
+            <Link
+              href={`/list?category=${cat._id}`}
+              onClick={(e) => handleClick(e)}
+            >
+              <div className="relative bg-slate-100 w-full h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
+                <Image
+                  src={cat.image}
+                  alt={cat.name}
+                  fill
+                  sizes="25vw"
+                  className="object-cover"
+                />
+                
+                
+                <span className="absolute top-3 left-3 bg-white text-black text-[14px] md:text-[18px] font-semibold px-3 py-1 rounded-full shadow">
                   {cat.name}
-                </h1>
-              </Link>
-            </div>
-          ))}
-        </Slider>
-      </div>
+                </span>
+              </div>
+            </Link>
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 }

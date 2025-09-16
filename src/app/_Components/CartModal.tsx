@@ -10,8 +10,6 @@ import React, { useEffect } from "react";
 export default function CartModal() {
   const { cart, handleRemoveItem } = useAppContext();
 
-  function handleCheckout() {}
-
   function turncateText(text: string, maxChars: number) {
     if (text.length <= maxChars) return text;
 
@@ -109,12 +107,11 @@ export default function CartModal() {
               View Cart
             </Button>
           </Link>
-          <Button
-            className="bg-black disabled:cursor-not-allowed disabled:opacity-75 cursor-pointer"
-            onClick={handleCheckout}
-          >
-            Checkout
-          </Button>
+          <Link href="/checkout">
+            <Button className="bg-black disabled:cursor-not-allowed disabled:opacity-75 cursor-pointer">
+              Checkout
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
