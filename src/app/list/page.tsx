@@ -30,10 +30,6 @@ export default async function ProductsPage() {
             Grab up to 50% off on
             <br /> Selected Products
           </h1>
-
-          <button className="rounded-3xl py-3 px-5 text-sm bg-[#F35C7A] text-white cursor-pointer hover:bg-white hover:text-[#F35C7A] transition-colors">
-            Buy Now
-          </button>
         </div>
 
         <div className="relative w-1/3">

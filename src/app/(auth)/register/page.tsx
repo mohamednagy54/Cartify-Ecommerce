@@ -43,8 +43,8 @@ export default function RegisterPage() {
         .string()
         .nonempty("Phone is Required")
         .regex(
-          /^\+20\d{10}$/,
-          "Phone must start with +20 and have 10 digits after it"
+          /^01[0-2,5]{1}[0-9]{8}$/,
+          "Phone must be a valid Egyptian number"
         ),
     })
     .refine((data) => data.password === data.rePassword, {

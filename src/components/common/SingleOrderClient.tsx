@@ -106,9 +106,9 @@ export default function SingleOrderClient({ id }: { id: string }) {
             Phone: <span className="text-black">{phone}</span>
           </p>
           <p className="text-gray-800">
-            Details:{" "}
+            Address:{" "}
             <span className="text-black">
-              {details === "" ? "You didn't provide Details" : details}
+              {details === "" ? "You didn't provide Address" : details}
             </span>
           </p>
         </div>

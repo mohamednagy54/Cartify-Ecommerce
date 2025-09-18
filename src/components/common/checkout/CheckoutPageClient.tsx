@@ -24,6 +24,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useAppContext } from "@/context/appContext";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -40,7 +41,7 @@ const formSchema = z.object({
     .nonempty("You need to provide a valid number")
     .regex(/^01[0-2,5]{1}[0-9]{8}$/, "Phone must be a valid Egyptian number"),
   city: z.string().nonempty({ message: "Please select a country" }),
-  details: z.string().optional(),
+  details: z.string().nonempty("You must type your address"),
 });
 
 const GovernoratesOfEgypt = [
@@ -79,7 +80,10 @@ export default function CheckoutPageClient() {
   const [isLoadingCart, setIsLoadingCart] = useState(true);
   const { cart, turncateText, formatPrice, handleLoggingOut, setCart } =
     useAppContext();
+  const { data: session } = useSession();
   const router = useRouter();
+
+  console.log(session);
 
   useEffect(() => {
     if (cart) {
@@ -153,7 +157,7 @@ export default function CheckoutPageClient() {
         <div className="">
           <div className="p-4 bg-gray-100 flex justify-between items-center rounded-md text-sm mb-4">
             <span className="text-gray-700">
-              Logged In as nagy14966@gmail.com
+              Logged In as {session?.user.email}
             </span>
 
             <span
@@ -233,10 +237,10 @@ export default function CheckoutPageClient() {
                   name="details"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Details</FormLabel>
+                      <FormLabel>Address</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Enter delivery details"
+                          placeholder="Enter Your Address"
                           className="resize-none"
                           {...field}
                         />
@@ -364,26 +368,36 @@ export default function CheckoutPageClient() {
             <p>{formatPrice(total)}</p>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4  mt-6">
-            <button
-              className={`flex-1 cursor-pointer bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors disabled:cursor-not-allowed`}
-              onClick={form.handleSubmit((values) =>
-                handleCheckout(values, "cash")
-              )}
-              disabled={isLoading}
-            >
-              Cash Order
-            </button>
+          <div className="flex flex-col md:flex-row gap-4 mt-6">
+            <div className="flex-1 flex flex-col">
+              <button
+                className={`w-full cursor-pointer bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors disabled:cursor-not-allowed`}
+                onClick={form.handleSubmit((values) =>
+                  handleCheckout(values, "cash")
+                )}
+                disabled={isLoading}
+              >
+                Cash Order
+              </button>
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                Pay on delivery
+              </p>
+            </div>
 
-            <button
-              onClick={form.handleSubmit((values) =>
-                handleCheckout(values, "card")
-              )}
-              disabled={isLoading}
-              className={`flex-1 cursor-pointer bg-[#f14c6d] text-white py-3 rounded-lg transition-colors hover:bg-[#ef6c86] disabled:cursor-not-allowed`}
-            >
-              Secure Checkout
-            </button>
+            <div className="flex-1 flex flex-col">
+              <button
+                onClick={form.handleSubmit((values) =>
+                  handleCheckout(values, "card")
+                )}
+                disabled={isLoading}
+                className={`w-full cursor-pointer bg-[#f14c6d] text-white py-3 rounded-lg transition-colors hover:bg-[#ef6c86] disabled:cursor-not-allowed`}
+              >
+                Secure Checkout
+              </button>
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                Pay with credit card
+              </p>
+            </div>
           </div>
         </div>
       </div>
