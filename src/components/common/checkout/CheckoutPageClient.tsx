@@ -83,8 +83,6 @@ export default function CheckoutPageClient() {
   const { data: session } = useSession();
   const router = useRouter();
 
-  console.log(session);
-
   useEffect(() => {
     if (cart) {
       setIsLoadingCart(false);

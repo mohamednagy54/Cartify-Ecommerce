@@ -18,8 +18,14 @@ import Link from "next/link";
 export default function WishlistPageClient() {
   const [view, setView] = useState<"grid" | "list">("grid");
 
-  const { wishlist, setWishlist, formatPrice, handleAddToCart, turncateText } =
-    useAppContext();
+  const {
+    wishlist,
+    setWishlist,
+    formatPrice,
+    handleAddToCart,
+    turncateText,
+    cartLoading,
+  } = useAppContext();
 
   useEffect(() => {
     async function handleGetWishlist() {
@@ -111,10 +117,19 @@ export default function WishlistPageClient() {
                           {formatPrice(price)}
                         </p>
                         <Button
-                          className="mt-2 w-full"
+                          className={`mt-2 w-full flex items-center justify-center rounded-xl transition-colors ${
+                            cartLoading === _id
+                              ? "bg-black cursor-not-allowed pointer-events-none"
+                              : "bg-black hover:bg-[#F35C7A] cursor-pointer text-white"
+                          }`}
                           onClick={() => handleAddToCart(_id)}
+                          disabled={cartLoading === _id}
                         >
-                          Add to Cart
+                          {cartLoading === _id ? (
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                            "Add to Cart"
+                          )}
                         </Button>
                       </div>
                     );

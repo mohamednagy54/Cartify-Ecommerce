@@ -57,6 +57,10 @@ interface AppContextType {
     React.SetStateAction<{ min?: number; max?: number }>
   >;
   sortValue: string;
+  cartLoading: string | null;
+  wishlistLoading: string | null;
+  setCartLoading: React.Dispatch<React.SetStateAction<string | null>>;
+  setWishlistLoading: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -73,6 +77,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     min?: number;
     max?: number;
   }>({});
+
+  const [cartLoading, setCartLoading] = useState<string | null>(null);
+  const [wishlistLoading, setWishlistLoading] = useState<string | null>(null);
 
   const { data: session, status } = useSession();
 
@@ -124,6 +131,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   async function handleAddToCart(productId: string) {
+    if (cartLoading === productId) return;
+
+    setCartLoading(productId);
+
     try {
       const token = await getUserToken();
       if (!token) {
@@ -145,10 +156,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       } else {
         toast.error("Something went wrong.");
       }
+    } finally {
+      setCartLoading(null);
     }
   }
 
   async function handleAddToWishlist(product: ProductType) {
+    if (wishlistLoading === product._id) return;
+
+    setWishlistLoading(product._id);
     try {
       const token = await getUserToken();
       if (!token) {
@@ -184,6 +200,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       } else {
         toast.error("Something went wrong.");
       }
+    } finally {
+      setWishlistLoading(null);
     }
   }
 
@@ -330,6 +348,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         filterByPrice,
         priceFilter,
         setPriceFilter,
+        cartLoading,
+        wishlistLoading,
       }}
     >
       {children}

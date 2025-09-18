@@ -30,6 +30,8 @@ export default function ProductListClient({
     handleAddToWishlist,
     wishlist,
     formatPrice,
+    cartLoading,
+    wishlistLoading,
   } = useAppContext();
 
   useEffect(() => {
@@ -120,17 +122,25 @@ export default function ProductListClient({
 
               {/* Wishlist Icon */}
               <button
-                className={`absolute top-3 right-3 p-2 rounded-full  
-        transition-colors cursor-pointer shadow-sm z-20
-        ${
-          isWishlisted
-            ? "bg-[#F35C7A] text-white"
-            : "bg-white/90 text-black/70 hover:text-white hover:bg-[#F35C7A]"
-        }`}
-                onClick={() => handleAddToWishlist(product)}
-              >
-                <AiOutlineHeart size={18} />
-              </button>
+                            type="button"
+                            className={`absolute top-3 right-3 p-2 rounded-full  
+                          transition-colors cursor-pointer shadow-sm z-20
+                          ${
+                            isWishlisted
+                              ? "bg-[#F35C7A] text-white"
+                              : "bg-white/90 text-black/70 hover:text-white hover:bg-[#F35C7A]"
+                          } ${
+                              wishlistLoading === _id ? "opacity-70 cursor-not-allowed" : ""
+                            }`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              handleAddToWishlist(product);
+                            }}
+                            disabled={wishlistLoading === _id}
+                          >
+                            <AiOutlineHeart size={18} />
+                          </button>
             </div>
 
             {/* Product Info */}
@@ -160,13 +170,22 @@ export default function ProductListClient({
                 <div className="flex items-center gap-2">
                   {/* Cart Icon */}
                   <button
-                    className="p-2 rounded-full border border-black/70 hover:bg-[#F35C7A] hover:text-white hover:border-white cursor-pointer transition-all"
+                    className={`p-2 rounded-full border border-black/70 cursor-pointer transition-all flex items-center justify-center ${
+                      cartLoading === _id
+                        ? "bg-[#F35C7A] cursor-not-allowed pointer-events-none border-white"
+                        : "hover:bg-[#F35C7A] hover:text-white hover:border-white"
+                    }`}
                     onClick={(e) => {
                       e.preventDefault();
                       handleAddToCart(product._id);
                     }}
+                    disabled={cartLoading === _id}
                   >
-                    <FiShoppingCart size={16} />
+                    {cartLoading === _id ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <FiShoppingCart size={16} />
+                    )}
                   </button>
                 </div>
               </div>

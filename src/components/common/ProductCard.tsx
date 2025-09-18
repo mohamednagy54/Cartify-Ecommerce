@@ -18,8 +18,14 @@ export default function ProductCard({
   product,
   isHero = false,
 }: ProductCardProps) {
-  const { turncateText, handleAddToCart, handleAddToWishlist, wishlist } =
-    useAppContext();
+  const {
+    turncateText,
+    handleAddToCart,
+    handleAddToWishlist,
+    wishlist,
+    cartLoading,
+    wishlistLoading,
+  } = useAppContext();
 
   const { _id, imageCover, title, price, description } = product;
 
@@ -86,14 +92,21 @@ export default function ProductCard({
 
                 <button
                   type="button"
-                  className="bg-black/40 hover:bg-[#F35C7A] backdrop-blur-sm border border-white/30 text-white hover:text-white transition-all duration-200 rounded-xl cursor-pointer p-2"
+                  className={`bg-black/40 hover:bg-[#F35C7A] cursor-pointer backdrop-blur-sm border border-white/30 text-white transition-all duration-200 rounded-xl p-2 flex items-center justify-center ${
+                    cartLoading === _id ? "opacity-70 cursor-not-allowed" : ""
+                  }`}
+                  disabled={cartLoading === _id}
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     handleAddToCart(_id);
                   }}
                 >
-                  <HiShoppingCart className="h-5 w-5" />
+                  {cartLoading === _id ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <HiShoppingCart className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -123,12 +136,15 @@ export default function ProductCard({
               isWishlisted
                 ? "bg-[#F35C7A] text-white"
                 : "bg-white/90 text-black/70 hover:text-white hover:bg-[#F35C7A]"
-            }`}
+            } ${
+                wishlistLoading === _id ? "opacity-70 cursor-not-allowed" : ""
+              }`}
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 handleAddToWishlist(product);
               }}
+              disabled={wishlistLoading === _id}
             >
               <AiOutlineHeart size={18} />
             </button>
@@ -156,10 +172,19 @@ export default function ProductCard({
               <Button
                 size="icon"
                 variant="default"
-                className="rounded-xl hover:bg-[#F35C7A] transition-colors cursor-pointer"
+                className={`rounded-xl transition-colors flex items-center justify-center ${
+                  cartLoading === _id
+                    ? "opacity-70 cursor-not-allowed pointer-events-none bg-black/40"
+                    : "hover:bg-[#F35C7A] cursor-pointer"
+                }`}
                 onClick={() => handleAddToCart(_id)}
+                disabled={cartLoading === _id}
               >
-                <HiShoppingCart className="h-5 w-5" />
+                {cartLoading === _id ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <HiShoppingCart className="h-5 w-5" />
+                )}
               </Button>
             </div>
           </div>
