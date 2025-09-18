@@ -125,6 +125,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   async function handleAddToCart(productId: string) {
     try {
+      const token = await getUserToken();
+      if (!token) {
+        toast.error("You must be logged in to add items to Cart.");
+        router.push("/login");
+        return;
+      }
       const result = await addToCart(productId);
       if (result.status !== "success") {
         throw new Error(result.message || "Failed to add product to cart");
@@ -135,12 +141,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       setCart(cart);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        if (err.message === "User is not authenticated") {
-          toast.error("You must be logged in");
-          router.push("/login");
-        }
+        toast.error(err.message);
       } else {
-        toast.error("Something went wrong");
+        toast.error("Something went wrong.");
       }
     }
   }
