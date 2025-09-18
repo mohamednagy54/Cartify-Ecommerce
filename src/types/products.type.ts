@@ -17,7 +17,7 @@ export interface ProductType {
   updatedAt: Date;
   id: string;
   priceAfterDiscount?: number;
-  reviews?: any[];
+  reviews?: ReviewType[];
   returnPolicy?: string;
   shippingInfo?: string;
 }
@@ -28,4 +28,17 @@ export interface Brand {
   slug: string;
   image?: string;
   category?: string;
+}
+
+export interface ReviewType {
+  _id: string;
+  user: {
+    _id: string;
+    name: string;
+    avatar?: string;
+  };
+  rating: number;
+  comment: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

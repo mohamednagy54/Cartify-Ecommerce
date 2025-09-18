@@ -10,9 +10,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CartModal from "./CartModal";
-import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { useAppContext } from "@/context/appContext";
 
 export default function NavIcons({ status }: { status: string }) {

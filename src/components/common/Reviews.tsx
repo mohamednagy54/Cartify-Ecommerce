@@ -1,7 +1,5 @@
-
-
-import Image from 'next/image';
-import React from 'react'
+import Image from "next/image";
+import React from "react";
 
 const reviewsData = [
   {
@@ -43,8 +41,14 @@ const reviewsData = [
 ];
 
 export default function Reviews() {
-  return reviewsData.map((review: any) => { 
-    const { id, customer: { display_name,avatar_url},rating,heading,body,media } = review
+  return reviewsData.map((review: any) => {
+    const {
+      id,
+      customer: { display_name, avatar_url },
+      heading,
+      body,
+      media,
+    } = review;
 
     return (
       <div className="flex flex-col gap-4" key={id}>
@@ -87,5 +91,5 @@ export default function Reviews() {
         </div>
       </div>
     );
-  })
+  });
 }

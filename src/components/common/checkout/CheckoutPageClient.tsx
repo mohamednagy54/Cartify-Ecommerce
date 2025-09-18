@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import {
@@ -34,7 +32,6 @@ import { useForm } from "react-hook-form";
 import { CiShoppingTag } from "react-icons/ci";
 import { toast } from "sonner";
 import * as z from "zod";
-
 
 const formSchema = z.object({
   fullName: z.string().min(3, { message: "Full name is required" }),
@@ -76,81 +73,79 @@ const GovernoratesOfEgypt = [
   "Sohag",
 ];
 
-
 export default function CheckoutPageClient() {
   const [isPromo, setIsPromo] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isLoadingCart, setIsLoadingCart] = useState(true);
-    const { cart, turncateText, formatPrice, handleLoggingOut, setCart } =
-      useAppContext();
-    const router = useRouter();
-  
-    useEffect(() => {
-      if (cart) {
-        setIsLoadingCart(false);
-      }
-    }, [cart]);
-  
-    const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-        fullName: "",
-        phone: "",
-        city: "",
-        details: "",
-      },
-    });
-  
-    async function handleCheckout(
-      values: z.infer<typeof formSchema>,
-      type: "card" | "cash"
-    ) {
-      if (isLoading) return;
-      setIsLoading(true);
-  
-      const payload = {
-        shippingAddress: {
-          details: values.details,
-          phone: values.phone,
-          city: values.city,
-        },
-      };
-  
-      try {
-        if (type === "card") {
-          const result = await checkoutSession(payload, cart?.cartId);
-          if (result.status === "success") {
-            setCart(null);
-            window.location.href = result.session.url;
-            return;
-          }
-        }
-  
-        if (type === "cash") {
-          const result = await createCashOrder(payload, cart?.cartId);
-          if (result.status === "success") {
-            toast.success("Cash order created successfully!");
-            setCart(null);
-            router.push("/allorders");
-            return;
-          }
-        }
-        toast.error("There is a problem with checkout!");
-      } catch (err) {
-        toast.error("Something went wrong!");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  
-    // count Total Price [taxes + discount]
-    const subTotal = cart?.data?.totalCartPrice || 0;
-    const delivery = 0;
-    const salesTax = 0;
-    const discount = 0;
-  
-    const total = subTotal + delivery + salesTax - discount;
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingCart, setIsLoadingCart] = useState(true);
+  const { cart, turncateText, formatPrice, handleLoggingOut, setCart } =
+    useAppContext();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (cart) {
+      setIsLoadingCart(false);
+    }
+  }, [cart]);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: "",
+      phone: "",
+      city: "",
+      details: "",
+    },
+  });
+
+  async function handleCheckout(
+    values: z.infer<typeof formSchema>,
+    type: "card" | "cash"
+  ) {
+    if (isLoading) return;
+    setIsLoading(true);
+
+    const payload = {
+      shippingAddress: {
+        details: values.details,
+        phone: values.phone,
+        city: values.city,
+      },
+    };
+
+    try {
+      if (type === "card") {
+        const result = await checkoutSession(payload, cart?.cartId);
+        if (result.status === "success") {
+          setCart(null);
+          window.location.href = result.session.url;
+          return;
+        }
+      }
+
+      if (type === "cash") {
+        const result = await createCashOrder(payload, cart?.cartId);
+        if (result.status === "success") {
+          toast.success("Cash order created successfully!");
+          setCart(null);
+          router.push("/allorders");
+          return;
+        }
+      }
+      toast.error("There is a problem with checkout!");
+    } catch (err) {
+      toast.error("Something went wrong!");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  // count Total Price [taxes + discount]
+  const subTotal = cart?.data?.totalCartPrice || 0;
+  const delivery = 0;
+  const salesTax = 0;
+  const discount = 0;
+
+  const total = subTotal + delivery + salesTax - discount;
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 pt-20">

@@ -10,7 +10,6 @@ interface ProductListClientProps {
 
 export default function ProductListGrid({
   initialProducts,
-  useContext = false,
 }: ProductListClientProps) {
   const heroProduct = initialProducts[8];
   const regularProducts = initialProducts.slice(1, 5);

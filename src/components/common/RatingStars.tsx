@@ -1,4 +1,3 @@
-import { Star, StarHalf, StarOff } from "lucide-react";
 import React from "react";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 

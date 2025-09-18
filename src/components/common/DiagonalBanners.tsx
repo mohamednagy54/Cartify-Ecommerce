@@ -1,7 +1,3 @@
-
-
-
-
 const DiagonalBanners = () => {
   return (
     <div className="relative mt-8 w-full mx-auto px-4 h-20">
@@ -11,7 +7,7 @@ const DiagonalBanners = () => {
             ✱ FRESH ARRIVALS
           </span>
           <span className="text-white font-bold tracking-wider text-[10px] md:text-[16px] lg:text-xl xl:text-2xl">
-            ✱ STEP INTO '26
+            ✱ STEP INTO 26
           </span>
           <span className="text-white font-bold tracking-wider text-[10px] md:text-[16px] lg:text-xl xl:text-2xl">
             ✱ LIMITED RELEASE
@@ -28,7 +24,7 @@ const DiagonalBanners = () => {
             ✱ FRESH ARRIVALS
           </span>
           <span className="text-white font-bold tracking-wider text-[10px] md:text-[16px] lg:text-xl xl:text-2xl">
-            ✱ STEP INTO '26
+            ✱ STEP INTO 26
           </span>
           <span className="text-white font-bold tracking-wider text-[10px] md:text-[16px] lg:text-xl xl:text-2xl">
             ✱ LIMITED RELEASE

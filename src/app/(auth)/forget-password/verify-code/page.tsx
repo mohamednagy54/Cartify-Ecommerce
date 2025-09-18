@@ -85,10 +85,19 @@ export default function VerifyCodePage() {
           position: "top-right",
         });
       }
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.", {
-        position: "top-right",
-      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(
+          error.message || "Something went wrong. Please try again.",
+          {
+            position: "top-right",
+          }
+        );
+      } else {
+        toast.error("Something went wrong. Please try again.", {
+          position: "top-right",
+        });
+      }
     }
   }
 
