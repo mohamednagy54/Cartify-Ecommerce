@@ -11,7 +11,9 @@ interface QtyProps {
 }
 
 export default function AddQty({ qty, product }: QtyProps) {
-  const { handleAddToCart } = useAppContext();
+  const { handleAddToCart, handleAddToWishlist, wishlist } = useAppContext();
+
+  const isWishlisted = wishlist.some((item) => item._id === product._id);
 
   return (
     <div className="flex flex-col gap-4">
@@ -39,10 +41,16 @@ export default function AddQty({ qty, product }: QtyProps) {
         </button>
 
         <button
-          className="p-2 rounded-full cursor-pointer text-black hover:bg-[#F35C7A] hover:text-white transition-colors"
+          className={`p-2 rounded-full cursor-pointer transition-all duration-300 
+    flex items-center justify-center
+    ${
+      isWishlisted
+        ? "bg-[#F35C7A] text-white shadow-md"
+        : "bg-white/90 text-black/70 border border-gray-200 hover:bg-[#F35C7A] hover:text-white shadow-sm"
+    }`}
           onClick={(e) => {
             e.preventDefault();
-            console.log("Added to wishlist:", product._id);
+            handleAddToWishlist(product);
           }}
         >
           <AiOutlineHeart size={24} />

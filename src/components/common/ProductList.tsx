@@ -8,23 +8,20 @@ interface ProductListProps {
   limit?: number;
   filterType?: string;
   searchParams?: string;
-  categoryId?: string;
   useContext?: boolean;
-  variant?: "default" | "grid"
+  variant?: "default" | "grid";
 }
 
 export default async function ProductList({
   limit,
-  searchParams,
   filterType,
-  categoryId,
+
   useContext = false,
-  variant = "default"
+  variant = "default",
 }: ProductListProps) {
   const queryParams = new URLSearchParams();
   if (limit) queryParams.append("limit", limit.toString());
   if (filterType) queryParams.append("sort", `-${filterType}`);
-  if (categoryId) queryParams.append("category", `${categoryId}`);
 
   const res = await fetch(
     `https://ecommerce.routemisr.com/api/v1/products${
@@ -42,17 +39,9 @@ export default async function ProductList({
   return (
     <>
       {variant === "grid" ? (
-        <ProductListGrid
-          initialProducts={products}
-          search={searchParams}
-          useContext={useContext}
-        />
+        <ProductListGrid initialProducts={products} useContext={useContext} />
       ) : (
-        <ProductListClient
-          initialProducts={products}
-          search={searchParams}
-          useContext={useContext}
-        />
+        <ProductListClient initialProducts={products} useContext={useContext} />
       )}
     </>
   );

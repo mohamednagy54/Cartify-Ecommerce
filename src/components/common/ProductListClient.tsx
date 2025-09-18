@@ -9,10 +9,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import React, { useEffect } from "react";
 
 import { FiShoppingCart } from "react-icons/fi";
-
-import { removeFromWishlist } from "@/WishlistActions/WishlistActions";
-import { toast } from "sonner";
-import { WishlistItem } from "@/types/wishlist.type";
+import { useSearchParams } from "next/navigation";
 
 interface ProductListClientProps {
   initialProducts: ProductType[];
@@ -25,70 +22,48 @@ export default function ProductListClient({
   useContext = false,
 }: ProductListClientProps) {
   const {
-    products,
+    filteredProducts,
+    setFilteredProducts,
     setProducts,
     searchValue,
     handleAddToCart,
-    setWishlist,
+    handleAddToWishlist,
     wishlist,
+    formatPrice,
   } = useAppContext();
 
   useEffect(() => {
     if (useContext) {
       setProducts(initialProducts);
+      setFilteredProducts(initialProducts);
     }
-  }, [initialProducts, setProducts, useContext]);
+  }, [initialProducts, setProducts, setFilteredProducts, useContext]);
+
+  const searchParams = useSearchParams();
+  const categoryName = searchParams.get("category");
+  const brandName = searchParams.get("brand");
 
   const filtered = searchValue
-    ? (useContext ? products : initialProducts).filter((p) =>
+    ? (useContext ? filteredProducts : initialProducts).filter((p) =>
         p.title.toLowerCase().includes(searchValue.toLowerCase())
       )
     : useContext
-    ? products
+    ? filteredProducts
     : initialProducts;
 
-  function turncateText(text: string, maxChars: number) {
-    if (text.length <= maxChars) return text;
+  let finalFiltered = filtered;
 
-    return text.slice(0, maxChars) + "...";
+  if (categoryName) {
+    finalFiltered = filtered.filter(
+      (product) => product.category.slug === categoryName
+    );
+  } else if (brandName) {
+    finalFiltered = filtered.filter(
+      (product) => product.brand.slug === brandName
+    );
   }
 
-  function formatPrice(value: number) {
-    return new Intl.NumberFormat("En-EG", {
-      style: "currency",
-      currency: "EGP",
-    }).format(value);
-  }
-
-  async function handleAddToWishlist(product: ProductType) {
-    try {
-      const isAlreadyWishlisted = wishlist.some(
-        (item) => item._id === product._id
-      );
-
-      if (isAlreadyWishlisted) {
-        
-        
-        const data = await removeFromWishlist(product._id);
-
-        if (data) {
-          toast.success("Product removed from your wishlist!");
-          setWishlist((prev) =>
-            prev.filter((item) => item._id !== product._id)
-          );
-        }
-      } else {
-        
-        
-        toast.success("Product added successfully to your wishlist!");
-        setWishlist((prev) => [...prev, product as WishlistItem]);
-      }
-    } catch (error: any) {
-      toast.error(error.message || "something went wrong");
-    }
-  }
-
-  if (!filtered || filtered.length === 0) {
+  if (!finalFiltered || finalFiltered.length === 0) {
     return (
       <div className="text-center py-20 text-gray-500">
         No products available at the moment
@@ -97,8 +72,8 @@ export default function ProductListClient({
   }
 
   return (
-    <div className="mt-12 flex gap-6 justify-start flex-wrap">
-      {filtered?.map((product: ProductType) => {
+    <div className="mt-12 flex gap-4 justify-start flex-wrap">
+      {finalFiltered?.map((product: ProductType) => {
         const { _id, imageCover, description, price, title, images } = product;
 
         const isWishlisted = wishlist.some((item) => item._id === product._id);
@@ -177,14 +152,11 @@ export default function ProductListClient({
                 {description}
               </p>
 
-              {/* Price + Actions */}
               <div className="flex items-center justify-between mt-auto">
-                {/* Price */}
                 <div className="font-bold text-black text-base">
                   {formatPrice(price)}
                 </div>
 
-                {/* Icons */}
                 <div className="flex items-center gap-2">
                   {/* Cart Icon */}
                   <button

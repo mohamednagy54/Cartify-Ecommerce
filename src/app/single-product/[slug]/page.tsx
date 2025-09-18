@@ -1,9 +1,32 @@
-import AddQty from "@/app/_Components/AddQty";
-import ProductImages from "@/app/_Components/ProductImages";
-import RatingStars from "@/app/_Components/RatingStars";
-import Reviews from "@/app/_Components/Reviews";
+import AddQty from "@/components/common/AddQty";
+import ProductImages from "@/components/common/ProductImages";
+import RatingStars from "@/components/common/RatingStars";
+import Reviews from "@/components/common/Reviews";
 import { ProductType } from "@/types/products.type";
 import React, { Suspense } from "react";
+
+async function getProduct(id: string): Promise<ProductType> {
+  const res = await fetch(
+    `https://ecommerce.routemisr.com/api/v1/products/${id}`,
+    { cache: "no-store" }
+  );
+  const data = await res.json();
+  return data.data;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const { slug: id } = await params;
+  const product = await getProduct(id);
+
+  return {
+    title: `${product.title} | Cartify`,
+    description: product.description,
+  };
+}
 
 export default async function SingleProductPage({
   params,
@@ -12,14 +35,7 @@ export default async function SingleProductPage({
 }) {
   const { slug: id } = await params;
 
-  const res = await fetch(
-    `https://ecommerce.routemisr.com/api/v1/products/${id}`,
-    {
-      cache: "no-store",
-    }
-  );
-
-  const data = await res.json();
+  const product = await getProduct(id);
 
   const {
     title,
@@ -29,7 +45,7 @@ export default async function SingleProductPage({
     quantity,
     ratingsAverage,
     reviews,
-  }: ProductType = data.data;
+  }: ProductType = product;
 
   function formatPrice(value: number) {
     return new Intl.NumberFormat("En-EG", {
@@ -37,8 +53,6 @@ export default async function SingleProductPage({
       currency: "EGP",
     }).format(value);
   }
-
-  console.log(reviews);
 
   return (
     <div className="px-4  pt-20 md:px-8 lg:px-16 xl:px-32 2xl:px-40 relative flex flex-col lg:flex-row gap-16 ">
@@ -66,7 +80,7 @@ export default async function SingleProductPage({
         <RatingStars rating={ratingsAverage} />
 
         {/* Add Quantitiy */}
-        <AddQty qty={quantity || 0} product={data.data} />
+        <AddQty qty={quantity || 0} product={product} />
 
         <div className="h-[2px] bg-gray-100" />
         {/* Additional info */}

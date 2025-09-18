@@ -1,17 +1,18 @@
+import Filteration from "@/components/common/Filteration";
+import ProductList from "@/components/common/ProductList";
+import SearchBar from "@/components/common/SearchBar";
+import SkeletonCards from "@/components/common/SkeletonCards";
+import { Metadata } from "next";
 import Image from "next/image";
 import React, { Suspense } from "react";
-import SkeletonCards from "../_Components/SkeletonCards";
-import ProductList from "../_Components/ProductList";
-import Filteration from "../_Components/Filteration";
-import SearchBar from "../_Components/SearchBar";
 
-export default async function ProductsPage({
-  searchParams,
-}: {
-  searchParams: any;
-}) {
-  const { category: categoryId, q: searchVal } = await searchParams;
+export const metadata: Metadata = {
+  title: "All Products | Cartify",
+  description:
+    "Explore our wide range of products and grab amazing deals at Cartify.",
+};
 
+export default async function ProductsPage() {
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-40 pt-24 relative">
       {/* Campaign */}
@@ -29,7 +30,14 @@ export default async function ProductsPage({
         </div>
 
         <div className="relative w-1/3">
-          <Image src="/campaign.png" alt="" fill className="object-contain" />
+          <Image
+            src="/campaign.png"
+            alt=""
+            fill
+            className="object-contain"
+            sizes="(max-width: 640px) 0vw, 33vw"
+            priority
+          />
         </div>
       </div>
 
@@ -40,13 +48,8 @@ export default async function ProductsPage({
 
       <h1 className="mt-12 text-xl font-semibold">All Products For You!</h1>
       {/* Products */}
-
       <Suspense fallback={<SkeletonCards />}>
-        <ProductList
-          useContext={true}
-          categoryId={categoryId}
-          searchParams={searchVal}
-        />
+        <ProductList useContext={true} />
       </Suspense>
     </div>
   );

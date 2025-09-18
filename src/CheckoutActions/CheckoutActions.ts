@@ -61,7 +61,7 @@ export async function createCashOrder(
   const data = await res.json();
 
   if (data.status !== "success") {
-    throw new Error(data.message || "Failed to complete checkout session!");
+    throw new Error(data.message || "Failed to Create Cash Order!");
   }
 
   return data;

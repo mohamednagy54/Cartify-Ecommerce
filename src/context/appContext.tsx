@@ -20,7 +20,12 @@ import { signOut, useSession } from "next-auth/react";
 import { OrdersType } from "@/types/orders.type";
 import { getUserOrders } from "@/OrderActions/OrderActions";
 import { WishlistItem } from "@/types/wishlist.type";
-import { getWishlist } from "@/WishlistActions/WishlistActions";
+import {
+  addToWishlist,
+  getWishlist,
+  removeFromWishlist,
+} from "@/WishlistActions/WishlistActions";
+import { getUserToken } from "@/utils/getUserToken";
 
 interface AppContextType {
   searchValue: string;
@@ -31,14 +36,27 @@ interface AppContextType {
   setOrders: React.Dispatch<React.SetStateAction<OrdersType[]>>;
   handleRemoveItem: (productId: string) => void;
   handleAddToCart: (productId: string) => void;
+  filterByBrand: (brandName: string) => void;
+  filterByCategory: (categoryName: string) => void;
+  filterBySort: (value: string) => void;
+  filterByPrice: (value: number | undefined, type: "min" | "max") => void;
+
+  filteredProducts: ProductType[];
+  setFilteredProducts: React.Dispatch<React.SetStateAction<ProductType[]>>;
   products: ProductType[];
   setProducts: React.Dispatch<React.SetStateAction<ProductType[]>>;
   handleLoggingOut: () => void;
   handleGetUserOrders: (userId: string | undefined) => void;
+  handleAddToWishlist: (product: ProductType) => void;
   turncateText: (text: string, maxChar: number) => string;
   formatPrice: (value: number) => string;
   wishlist: WishlistItem[];
   setWishlist: React.Dispatch<React.SetStateAction<WishlistItem[]>>;
+  priceFilter: { min?: number; max?: number };
+  setPriceFilter: React.Dispatch<
+    React.SetStateAction<{ min?: number; max?: number }>
+  >;
+  sortValue: string;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -49,6 +67,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartType | null>(null);
   const [orders, setOrders] = useState<OrdersType[]>([]);
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
+  const [sortValue, setSortValue] = useState<string>("");
+  const [priceFilter, setPriceFilter] = useState<{
+    min?: number;
+    max?: number;
+  }>({});
+
   const { data: session, status } = useSession();
 
   const router = useRouter();
@@ -89,8 +114,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         toast.success("Product removed from cart");
         setCart(data);
       }
-    } catch (err: any) {
-      toast.error(err.message || "Failed to remove product");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Failed to remove product");
+      }
     }
   }
 
@@ -103,12 +132,55 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       toast.success(result.message);
       const cart = await getAllCartItems();
       setCart(cart);
-    } catch (err: any) {
-      if (err.message === "User is not authenticated") {
-        toast.error("You must be logged in to add items to the cart.");
-        router.push("/login");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        if (err.message === "User is not authenticated") {
+          toast.error("You must be logged in to add items to the cart.");
+          router.push("/login");
+        } else {
+          toast.error(err.message || "Something went wrong.");
+        }
       } else {
-        toast.error(err.message || "Something went wrong.");
+        toast.error("Something went wrong.");
+      }
+    }
+  }
+
+  async function handleAddToWishlist(product: ProductType) {
+    try {
+      const token = await getUserToken();
+      if (!token) {
+        toast.error("You must be logged in to add items to Wishlist.");
+        router.push("/login");
+        return;
+      }
+
+      const isAlreadyWishlisted = wishlist.some(
+        (item) => item._id === product._id
+      );
+
+      if (isAlreadyWishlisted) {
+        const data = await removeFromWishlist(product._id);
+
+        if (data) {
+          toast.success("Product removed from your wishlist!");
+          setWishlist((prev) =>
+            prev.filter((item) => item._id !== product._id)
+          );
+        }
+      } else {
+        const data = await addToWishlist(product._id);
+
+        if (data) {
+          toast.success("Product added successfully to your wishlist!");
+          setWishlist((prev) => [...prev, product as WishlistItem]);
+        }
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Something went wrong.");
       }
     }
   }
@@ -127,8 +199,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     try {
       const orders = await getUserOrders(userId);
       setOrders(orders);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Failed to fetch Orders:", err);
+
+      if (err instanceof Error) {
+        console.error("Error message:", err.message);
+      }
     }
   }
 
@@ -143,6 +219,84 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       style: "currency",
       currency: "EGP",
     }).format(value);
+  }
+
+  // Filteration methods
+  function filterByBrand(brandName: string) {
+    if (brandName === "all") {
+      setFilteredProducts(products);
+      setSortValue("");
+    } else {
+      setFilteredProducts(
+        products.filter((product) => product.brand.slug === brandName)
+      );
+
+      setSortValue("");
+    }
+  }
+  function filterByCategory(categoryName: string) {
+    if (categoryName === "all") {
+      setFilteredProducts(products);
+      setSortValue("");
+    } else {
+      setFilteredProducts(
+        products.filter((product) => product.category.slug === categoryName)
+      );
+      setSortValue("");
+    }
+  }
+
+  function filterByPrice(value: number | undefined, type: "min" | "max") {
+    const newFilter = { [type]: value };
+    setPriceFilter(newFilter);
+
+    if (!newFilter.min && !newFilter.max) {
+      setFilteredProducts(products);
+      return;
+    }
+
+    const filtered = products.filter((product) => {
+      if (newFilter.min != null && product.price < newFilter.min) return false;
+      if (newFilter.max != null && product.price > newFilter.max) return false;
+      return true;
+    });
+
+    setFilteredProducts(filtered);
+  }
+
+  function filterBySort(value: string) {
+    setSortValue(value);
+    let sortedProducts = [...filteredProducts];
+
+    switch (value) {
+      case "asc price":
+        sortedProducts.sort((a, b) => a.price - b.price);
+
+        break;
+      case "desc price":
+        sortedProducts.sort((a, b) => b.price - a.price);
+
+        break;
+      case "asc lastUpdated":
+        sortedProducts.sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+
+        break;
+      case "desc lastUpdated":
+        sortedProducts.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+
+        break;
+
+      default:
+        sortedProducts = [...products];
+    }
+
+    setFilteredProducts(sortedProducts);
   }
 
   return (
@@ -164,6 +318,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         formatPrice,
         wishlist,
         setWishlist,
+        handleAddToWishlist,
+        filterByBrand,
+        filteredProducts,
+        setFilteredProducts,
+        filterByCategory,
+        filterBySort,
+        sortValue,
+        filterByPrice,
+        priceFilter,
+        setPriceFilter,
       }}
     >
       {children}

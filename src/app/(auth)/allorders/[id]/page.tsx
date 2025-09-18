@@ -1,4 +1,4 @@
-import SingleOrderClient from "@/app/_Components/SingleOrderClient";
+import SingleOrderClient from "@/components/common/SingleOrderClient";
 import React from "react";
 
 export default async function page({ params }: { params: { id: string } }) {

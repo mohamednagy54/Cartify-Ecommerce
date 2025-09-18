@@ -2,6 +2,7 @@
 
 import { BrandType } from "@/types/brand.type";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import Slider from "react-slick";
 
@@ -29,7 +30,10 @@ export default function BrandsSlider({ brands }: { brands: BrandType[] }) {
           {brands.map((brand: BrandType) => (
             <div key={brand._id} className="mx-3">
               <div className="flex items-center justify-center p-6 border bg-white   transition-transform hover:scale-105 cursor-pointer">
-                <div className="relative w-36 h-16  bg-white transition-transform hover:scale-105 cursor-pointer">
+                <Link
+                  href={`/list?brand=${brand.slug}`}
+                  className="relative w-36 h-16  bg-white transition-transform hover:scale-105 cursor-pointer"
+                >
                   <Image
                     src={brand.image}
                     alt={brand.name}
@@ -40,7 +44,7 @@ export default function BrandsSlider({ brands }: { brands: BrandType[] }) {
                                                 25vw"
                     className="object-contain"
                   />
-                </div>
+                </Link>
               </div>
             </div>
           ))}

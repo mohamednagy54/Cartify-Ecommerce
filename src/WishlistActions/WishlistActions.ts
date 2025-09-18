@@ -22,10 +22,9 @@ export async function addToWishlist(productId: string) {
   );
 
   const data = await res.json();
-  console.log(data);
 
   if (data.status !== "success") {
-    throw new Error(data.message || "Failed to add product to cart");
+    throw new Error(data.message || "Failed to add product to Wishlist");
   }
 
   return data;
@@ -45,15 +44,13 @@ export async function removeFromWishlist(productId: string) {
         "content-type": "application/json",
         token: token as string,
       },
-      
     }
   );
 
   const data = await res.json();
-  console.log(data);
 
   if (data.status !== "success") {
-    throw new Error(data.message || "Failed to add product to cart");
+    throw new Error(data.message || "Failed to add product to Wishlist");
   }
 
   return data;
@@ -80,7 +77,7 @@ export async function getWishlist() {
   const data = await res.json();
 
   if (data.status !== "success") {
-    throw new Error(data.message || "Failed to add product to cart");
+    throw new Error(data.message || "Failed to add product to Wishlist");
   }
 
   return data;

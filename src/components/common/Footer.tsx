@@ -27,7 +27,6 @@ const Footer = () => {
             <Image src="/facebook.png" alt="" width={16} height={16} />
             <Image src="/instagram.png" alt="" width={16} height={16} />
             <Image src="/youtube.png" alt="" width={16} height={16} />
-            <Image src="/pinterest.png" alt="" width={16} height={16} />
             <Image src="/x.png" alt="" width={16} height={16} />
           </div>
         </div>
@@ -100,7 +99,7 @@ const Footer = () => {
 
       {/* Bottom */}
       <div className="flex justify-between items-center flex-col md:flex-row gap-8 mt-16">
-        <div className="">© 2024 Cartify Shop</div>
+        <div className="">© {new Date().getFullYear()} Cartify Shop</div>
 
         <div className="flex  flex-wrap gap-8">
           <div className="">

@@ -150,7 +150,10 @@ export async function updateCartItemCount(productId: string, count: number) {
     );
 
     const data = await res.json();
-    return data;
+
+    if (data.status === "success") {
+      return data;
+    }
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Failed to update cart");
   }

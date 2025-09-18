@@ -39,7 +39,7 @@ export default function CategorySlider({
         {categories.map((cat) => (
           <div key={cat._id} className="px-3">
             <Link
-              href={`/list?category=${cat._id}`}
+              href={`/list?category=${cat.slug}`}
               onClick={(e) => handleClick(e)}
             >
               <div className="relative bg-slate-100 w-full h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">

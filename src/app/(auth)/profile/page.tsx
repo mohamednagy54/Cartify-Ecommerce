@@ -70,8 +70,6 @@ export default function Profile() {
     }
   }, [session?.user?.id]);
 
-  console.log(orders);
-
   type FormType = UpdateFormType | PasswordFormType;
 
   const form = useForm({
@@ -88,7 +86,7 @@ export default function Profile() {
   async function handleOnSubmit(values: FormType) {
     try {
       if (isResetPassword) {
-        console.log("Reset: ", values);
+
         const resetValues = values as PasswordFormType;
         const data = await updateLoggedUserPassword(resetValues);
 
@@ -112,8 +110,12 @@ export default function Profile() {
           toast.error(data?.errors?.msg || "Update failed");
         }
       }
-    } catch (err: any) {
-      toast.error(err.message || "Something went wrong.");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("Something went wrong.");
+      }
     }
   }
 
@@ -127,7 +129,7 @@ export default function Profile() {
   }, [session, isResetPassword, form]);
 
   return (
-    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-40 flex justify-center items-center min-h-screen">
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-40 flex justify-center items-center min-h-screen pt-24">
       <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-40">
         {/* Left */}
         <div className="w-full md:w-1/2">

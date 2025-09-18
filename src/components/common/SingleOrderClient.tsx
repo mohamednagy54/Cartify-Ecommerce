@@ -134,13 +134,16 @@ export default function SingleOrderClient({ id }: { id: string }) {
                   className="flex items-center gap-4 border p-3 rounded"
                   key={productId}
                 >
-                  <Image
-                    src={imageCover}
-                    alt={title}
-                    width={64}
-                    height={64}
-                    className="object-cover rounded"
-                  />
+                  <div className="relative w-[64px] h-[64px]">
+                    <Image
+                      src={imageCover}
+                      alt={title}
+                      fill
+                      sizes="64px"
+                      className="object-cover rounded"
+                    />
+                  </div>
+
                   <div>
                     <p className="font-medium">{title}</p>
                     <p className="text-sm text-gray-600">Brand: {brandName}</p>

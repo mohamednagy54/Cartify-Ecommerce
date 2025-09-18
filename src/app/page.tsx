@@ -1,14 +1,17 @@
 import { Suspense } from "react";
-import SliderComponent from "./_Components/SliderComponent";
-import SkeletonCards from "./_Components/SkeletonCards";
-import ProductList from "./_Components/ProductList";
-import CategoryList from "./_Components/CategoryList";
-import BrandsList from "./_Components/BrandsList";
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import DiagonalBanners from "./_Components/DiagonalBanners";
 
-export default async function Home() {
+import Link from "next/link";
+import BrandsList from "@/components/common/BrandsList";
+import DiagonalBanners from "@/components/common/DiagonalBanners";
+import ProductList from "@/components/common/ProductList";
+import CategoryList from "@/components/common/CategoryList";
+import SkeletonCards from "@/components/common/SkeletonCards";
+import SliderComponent from "@/components/common/SliderComponent";
+
+export default function Home() {
   return (
     <div className="">
       <SliderComponent />
@@ -19,12 +22,14 @@ export default async function Home() {
             {/* Left Card */}
             <div className="relative  rounded-2xl overflow-hidden shadow-md min-h-[400px]">
               <div className="absolute inset-0">
-                <div className="w-full h-full">
+                <div className="relative w-full h-full">
                   <Image
                     src="https://images.pexels.com/photos/9604298/pexels-photo-9604298.jpeg?_gl=1*d26x4x*_ga*NTkwOTc0NDE2LjE3NTQ5MzU4Nzk.*_ga_8JE65Q40S6*czE3NTc5MzgzMjQkbzE0JGcxJHQxNzU3OTM4NjM2JGoxNyRsMCRoMA.."
                     alt="Elegant male model in cream and beige clothing"
                     fill
-                    sizes="100%"
+                    sizes="(max-width: 768px) 100vw, 
+         (max-width: 1200px) 100vw, 
+         100vw"
                     className="object-cover object-center "
                   />
                 </div>
@@ -34,12 +39,14 @@ export default async function Home() {
                   <h2 className="text-3xl md:text-4xl font-medium text-white leading-relaxed flex-1">
                     Where dreams meet couture
                   </h2>
-                  <Button
-                    size="lg"
-                    className="rounded-full ml-6 text-black bg-white hover:text-white hover:bg-[#F35C7A] transition-colors"
-                  >
-                    Shop Now
-                  </Button>
+                  <Link href="/list">
+                    <Button
+                      size="lg"
+                      className="rounded-full ml-6 text-black bg-white hover:text-white hover:bg-[#F35C7A] transition-colors cursor-pointer"
+                    >
+                      Shop Now
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -47,12 +54,14 @@ export default async function Home() {
             {/* Right Card */}
             <div className="relative  rounded-2xl overflow-hidden shadow-md min-h-[400px]">
               <div className="absolute inset-0">
-                <div className="w-full h-full">
+                <div className="relative w-full h-full">
                   <Image
                     src="https://images.pexels.com/photos/18159348/pexels-photo-18159348.jpeg?_gl=1*13a1tgr*_ga*NTkwOTc0NDE2LjE3NTQ5MzU4Nzk.*_ga_8JE65Q40S6*czE3NTc5MzgzMjQkbzE0JGcxJHQxNzU3OTM5MTk5JGoxNSRsMCRoMA.."
                     alt="Elegant male model in cream and beige clothing"
                     fill
-                    sizes="100%"
+                    sizes="(max-width: 768px) 100vw, 
+         (max-width: 1200px) 100vw, 
+         100vw"
                     className="object-cover object-center "
                   />
                 </div>
@@ -64,12 +73,14 @@ export default async function Home() {
                     <br />
                     for every man
                   </h2>
-                  <Button
-                    size="lg"
-                    className="rounded-full ml-6 text-black bg-white hover:text-white hover:bg-[#F35C7A] transition-colors"
-                  >
-                    Shop Now
-                  </Button>
+                  <Link href="/list">
+                    <Button
+                      size="lg"
+                      className="rounded-full ml-6 text-black bg-white hover:text-white hover:bg-[#F35C7A] transition-colors cursor-pointer"
+                    >
+                      Shop Now
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -118,7 +129,12 @@ export default async function Home() {
           New Products
         </h1>
         <Suspense fallback={<SkeletonCards />}>
-          <ProductList limit={4} filterType="price" useContext={false} variant="default" />
+          <ProductList
+            limit={4}
+            filterType="price"
+            useContext={false}
+            variant="default"
+          />
         </Suspense>
       </div>
     </div>

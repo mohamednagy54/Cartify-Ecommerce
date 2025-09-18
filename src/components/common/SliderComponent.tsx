@@ -12,38 +12,37 @@ const slides: slidesType[] = [
   {
     id: 1,
     title: "Summer Sale Collections",
-    subtitle: "Trendy Picks for Sunny Days", // 👈 Subtitle جديد
+    subtitle: "Trendy Picks for Sunny Days",
     description: "Sale! Up to 50% off!",
-    img: "https://images.pexels.com/photos/27045934/pexels-photo-27045934.jpeg?_gl=1*1k3ra3e*_ga*NTkwOTc0NDE2LjE3NTQ5MzU4Nzk.*_ga_8JE65Q40S6*czE3NTc4MjUxOTEkbzExJGcxJHQxNzU3ODI1MjI3JGoyNCRsMCRoMA..",
+    img: "/sliderImages/1.webp",
     url: "/list",
     bg: "bg-gradient-to-r from-yellow-100 via-blue-100 to-pink-100",
-    reverse: false,
+
     buttonText: "Explore the Collections",
   },
   {
     id: 2,
     title: "Winter Sale Collections",
-    subtitle: "Cozy Styles for Cold Weather", // 👈 Subtitle جديد
+    subtitle: "Cozy Styles for Cold Weather",
     description: "Sale! Up to 50% off!",
-    img: "https://images.pexels.com/photos/17395505/pexels-photo-17395505.jpeg?_gl=1*fmiq4m*_ga*NTkwOTc0NDE2LjE3NTQ5MzU4Nzk.*_ga_8JE65Q40S6*czE3NTc4MjUxOTEkbzExJGcxJHQxNzU3ODI1MzUyJGoyMCRsMCRoMA..",
+    img: "/sliderImages/2.webp",
     url: "/list",
     bg: "bg-gradient-to-r from-blue-100 via-indigo-100 to-gray-100",
-    reverse: true,
+
     buttonText: "Shop Sustainable",
   },
   {
     id: 3,
     title: "Spring Sale Collections",
-    subtitle: "Fresh Looks for a New Season", // 👈 Subtitle جديد
+    subtitle: "Fresh Looks for a New Season",
     description: "Sale! Up to 50% off!",
-    img: "https://images.pexels.com/photos/8638715/pexels-photo-8638715.jpeg?_gl=1*19i14q*_ga*NTkwOTc0NDE2LjE3NTQ5MzU4Nzk.*_ga_8JE65Q40S6*czE3NTc4MjUxOTEkbzExJGcxJHQxNzU3ODI1NDg2JGoyNSRsMCRoMA..",
+    img: "/sliderImages/3.webp",
     url: "/list",
     bg: "bg-gradient-to-r from-green-100 via-yellow-100 to-pink-100",
-    reverse: false,
+
     buttonText: "Discover Collection",
   },
 ];
-
 
 export default function SliderComponent() {
   const sliderRef = useRef<Slider>(null);
@@ -80,12 +79,13 @@ export default function SliderComponent() {
           <div key={slide.id} className="relative h-screen">
             {/* Background Image */}
             <div className="absolute inset-0">
-              <div className="w-full h-full">
+              <div className="relative w-full h-full">
                 <Image
                   src={slide.img}
                   alt={slide.title}
                   fill
                   sizes="100vw"
+                  priority
                   className="object-cover"
                 />
               </div>

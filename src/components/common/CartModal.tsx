@@ -1,11 +1,10 @@
 "use client";
 
-import { getAllCartItems, removeItemFromCart } from "@/CartActions/CartActions";
 import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/context/appContext";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React from "react";
 
 export default function CartModal() {
   const { cart, handleRemoveItem } = useAppContext();
@@ -27,7 +26,6 @@ export default function CartModal() {
 
   return (
     <div className="w-max absolute top-14 right-0 p-4 bg-white rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] flex flex-col gap-6 z-20">
-      {/* <div className="">Cart is Empty</div> */}
       <h2 className="text-xl">Shopping Cart</h2>
       {/* List */}
       <div className="flex flex-col gap-4 max-h-80 overflow-y-auto scrollbar-custom">
@@ -41,15 +39,17 @@ export default function CartModal() {
 
           return (
             <div className="flex gap-4 my-2" key={productId}>
-              <Image
-                src={imageCover}
-                alt="product"
-                height={96}
-                width={72}
-                className="object-cover rounded-md"
-              />
+              <div className="relative w-[96px] h-[72px]">
+                <Image
+                  src={imageCover}
+                  alt="product"
+                  fill
+                  sizes="(max-width: 640px) 96px, 120px"
+                  className="object-cover rounded-md"
+                />
+              </div>
 
-              <div className="flex flex-col justify-between w-full">
+              <div className="flex flex-col justify-between w-full pr-2">
                 {/* Top */}
                 <div className="">
                   {/* Title */}
