@@ -129,7 +129,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   async function handleAddToCart(productId: string) {
-    if (cartLoading === productId) return;
+    if (cartLoading) return;
 
     setCartLoading(productId);
 
@@ -160,7 +160,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }
 
   async function handleAddToWishlist(product: ProductType) {
-    if (wishlistLoading === product._id) return;
+    if (wishlistLoading) return;
 
     setWishlistLoading(product._id);
     try {

@@ -122,25 +122,29 @@ export default function ProductListClient({
 
               {/* Wishlist Icon */}
               <button
-                            type="button"
-                            className={`absolute top-3 right-3 p-2 rounded-full  
+                type="button"
+                className={`absolute top-3 right-3 p-2 rounded-full  
                           transition-colors cursor-pointer shadow-sm z-20
                           ${
                             isWishlisted
                               ? "bg-[#F35C7A] text-white"
                               : "bg-white/90 text-black/70 hover:text-white hover:bg-[#F35C7A]"
                           } ${
-                              wishlistLoading === _id ? "opacity-70 cursor-not-allowed" : ""
-                            }`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault();
-                              handleAddToWishlist(product);
-                            }}
-                            disabled={wishlistLoading === _id}
-                          >
-                            <AiOutlineHeart size={18} />
-                          </button>
+                  wishlistLoading === _id ? "opacity-70 cursor-not-allowed" : ""
+                }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  handleAddToWishlist(product);
+                }}
+                disabled={!!wishlistLoading}
+              >
+                {wishlistLoading === product._id ? (
+                  <div className="w-4 h-4 border-2 border-black/70 border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <AiOutlineHeart size={18} />
+                )}
+              </button>
             </div>
 
             {/* Product Info */}
@@ -179,7 +183,7 @@ export default function ProductListClient({
                       e.preventDefault();
                       handleAddToCart(product._id);
                     }}
-                    disabled={cartLoading === _id}
+                    disabled={!!cartLoading}
                   >
                     {cartLoading === _id ? (
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
