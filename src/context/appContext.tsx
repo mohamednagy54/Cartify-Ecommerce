@@ -59,8 +59,6 @@ interface AppContextType {
   sortValue: string;
   cartLoading: string | null;
   wishlistLoading: string | null;
-  setCartLoading: React.Dispatch<React.SetStateAction<string | null>>;
-  setWishlistLoading: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
