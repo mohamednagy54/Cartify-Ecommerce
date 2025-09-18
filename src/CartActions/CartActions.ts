@@ -29,9 +29,7 @@ export async function getAllCartItems() {
 export async function addToCart(productId: string) {
   const token = await getUserToken();
 
-  if (!token) {
-    throw new Error("User is not authenticated");
-  }
+  if (!token) throw new Error("User is not authenticated");
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cart`, {
     method: "POST",
@@ -43,10 +41,8 @@ export async function addToCart(productId: string) {
   });
 
   const data = await res.json();
-
-  if (data.status !== "success") {
-    throw new Error("Failed to add product to cart");
-  }
+  if (data.status !== "success")
+    throw new Error(data.message || "Failed to add product to cart");
 
   return data;
 }

@@ -130,18 +130,18 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(result.message || "Failed to add product to cart");
       }
       toast.success(result.message);
+
       const cart = await getAllCartItems();
       setCart(cart);
     } catch (err: unknown) {
       if (err instanceof Error) {
         if (err.message === "User is not authenticated") {
-          toast.error("You must be logged in to add items to the cart.");
+          toast.error("You must be logged in");
+
           router.push("/login");
-        } else {
-          toast.error(err.message || "Something went wrong.");
         }
       } else {
-        toast.error("Something went wrong.");
+        toast.error("Something went wrong");
       }
     }
   }
