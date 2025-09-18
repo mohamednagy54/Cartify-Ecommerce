@@ -6,8 +6,8 @@ export async function getUserToken() {
   const cookiesData = await cookies();
   const tokenName =
     process.env.NODE_ENV === "production"
-      ? "next-auth.session-token"
-      : "__Secure-next-auth.session-token";
+      ? "__Secure-next-auth.session-token"
+      : "next-auth.session-token";
   const encryptedToken = cookiesData.get(tokenName)?.value;
 
   const data = await decode({
