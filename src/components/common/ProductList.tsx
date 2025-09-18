@@ -1,8 +1,9 @@
 import { ProductType } from "@/types/products.type";
 
-import React from "react";
+import React, { Suspense } from "react";
 import ProductListClient from "./ProductListClient";
 import ProductListGrid from "./ProductListGrid";
+import SkeletonCards from "./SkeletonCards";
 
 interface ProductListProps {
   limit?: number;
@@ -39,9 +40,16 @@ export default async function ProductList({
   return (
     <>
       {variant === "grid" ? (
-        <ProductListGrid initialProducts={products} useContext={useContext} />
+        <Suspense fallback={<SkeletonCards />}>
+          <ProductListGrid initialProducts={products} useContext={useContext} />
+        </Suspense>
       ) : (
-        <ProductListClient initialProducts={products} useContext={useContext} />
+        <Suspense fallback={<SkeletonCards />}>
+          <ProductListClient
+            initialProducts={products}
+            useContext={useContext}
+          />
+        </Suspense>
       )}
     </>
   );

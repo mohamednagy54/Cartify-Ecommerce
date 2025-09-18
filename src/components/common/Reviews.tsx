@@ -1,3 +1,4 @@
+import { ReviewType } from "@/types/products.type";
 import Image from "next/image";
 import React from "react";
 
@@ -41,7 +42,7 @@ const reviewsData = [
 ];
 
 export default function Reviews() {
-  return reviewsData.map((review: any) => {
+  return reviewsData.map((review: ReviewType) => {
     const {
       id,
       customer: { display_name, avatar_url },
@@ -55,7 +56,7 @@ export default function Reviews() {
         {/* User */}
         <div className="flex items-center gap-4 font-medium">
           <Image
-            src={avatar_url}
+            src={avatar_url || "/avatars/default.png"}
             alt={display_name}
             width={32}
             height={32}
@@ -77,7 +78,7 @@ export default function Reviews() {
 
         <div className="flex gap-2 flex-wrap">
           {media && media.length > 0
-            ? media.map((item: any) => (
+            ? media.map((item) => (
                 <Image
                   src={item.url}
                   key={item.id}

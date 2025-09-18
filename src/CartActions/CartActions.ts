@@ -127,34 +127,32 @@ export async function clearCart() {
 }
 
 export async function updateCartItemCount(productId: string, count: number) {
-  try {
-    const token = await getUserToken();
+  const token = await getUserToken();
 
-    if (!token) {
-      throw new Error("User is not authenticated");
-    }
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cart/${productId}`,
-      {
-        method: "PUT",
-        headers: {
-          "content-type": "application/json",
-          token: token as string,
-        },
-
-        body: JSON.stringify({
-          count,
-        }),
-      }
-    );
-
-    const data = await res.json();
-
-    if (data.status === "success") {
-      return data;
-    }
-  } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Failed to update cart");
+  if (!token) {
+    throw new Error("User is not authenticated");
   }
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cart/${productId}`,
+    {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        token: token as string,
+      },
+
+      body: JSON.stringify({
+        count,
+      }),
+    }
+  );
+
+  const data = await res.json();
+
+  if (data.status !== "success") {
+    throw new Error(data.message || "Failed to update cart");
+  }
+
+  return data;
 }

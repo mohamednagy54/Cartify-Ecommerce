@@ -31,14 +31,21 @@ export interface Brand {
 }
 
 export interface ReviewType {
-  _id: string;
-  user: {
-    _id: string;
-    name: string;
-    avatar?: string;
+  id: string;
+  customer: {
+    _id?: string;
+    display_name: string;
+    avatar_url?: string;
   };
+  heading?: string;
   rating: number;
-  comment: string;
-  createdAt: Date;
-  updatedAt: Date;
+  body: string;
+  media: ReviewMedia[];
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ReviewMedia {
+  id: string;
+  url: string;
 }

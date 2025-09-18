@@ -8,7 +8,7 @@ async function getBrands() {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/brands`,
       {
-        cache: "no-store",
+        next: { revalidate: 3600 },
       }
     );
 

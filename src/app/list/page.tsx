@@ -1,5 +1,6 @@
 import Filteration from "@/components/common/Filteration";
 import ProductList from "@/components/common/ProductList";
+import ProductListClient from "@/components/common/ProductListClient";
 import SearchBar from "@/components/common/SearchBar";
 import SkeletonCards from "@/components/common/SkeletonCards";
 import { Metadata } from "next";
@@ -13,6 +14,12 @@ export const metadata: Metadata = {
 };
 
 export default async function ProductsPage() {
+  const res = await fetch("https://ecommerce.routemisr.com/api/v1/products", {
+    cache: "no-store",
+  });
+  const data = await res.json();
+  const products = data.data;
+
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-40 pt-24 relative">
       {/* Campaign */}
@@ -48,9 +55,8 @@ export default async function ProductsPage() {
 
       <h1 className="mt-12 text-xl font-semibold">All Products For You!</h1>
       {/* Products */}
-      <Suspense fallback={<SkeletonCards />}>
-        <ProductList useContext={true} />
-      </Suspense>
+
+      <ProductListClient initialProducts={products} useContext={true} />
     </div>
   );
 }

@@ -1,12 +1,9 @@
-
-
-
 import CategorySlider from "./CategorySlider";
 import { CategoryType } from "@/types/categories.type";
 
 async function getCategories() {
   const res = await fetch(`https://ecommerce.routemisr.com/api/v1/categories`, {
-    cache: "no-store",
+    next: { revalidate: 3600 },
   });
 
   const data = await res.json();
