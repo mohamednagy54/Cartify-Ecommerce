@@ -137,7 +137,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       if (err instanceof Error) {
         if (err.message === "User is not authenticated") {
           toast.error("You must be logged in");
-
           router.push("/login");
         }
       } else {
