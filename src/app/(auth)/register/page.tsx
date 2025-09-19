@@ -17,6 +17,7 @@ import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
   const RegisterSchema = zod
@@ -38,7 +39,7 @@ export default function RegisterPage() {
         .string()
         .nonempty("Password is Required")
         .min(6, "Password must be at least 6 characters"),
-      rePassword: zod.string().nonempty("confirmPassword is Required"),
+      rePassword: zod.string().nonempty("Confirm Password is Required"),
       phone: zod
         .string()
         .nonempty("Phone is Required")
@@ -79,16 +80,25 @@ export default function RegisterPage() {
 
     const data = await res.json();
     if (data.message === "success") {
-      toast.success("Register Successfully, You can login now", {
-        position: "top-right",
-      });
+      toast.success("Register Successfully");
       registerForm.reset();
 
-      router.push("/login");
-    } else {
-      toast.error(data.message || "There was an error, please try again", {
-        position: "top-right",
+      const loginRes = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
       });
+
+      console.log(loginRes);
+
+      if (loginRes?.ok) {
+        router.push("/");
+      } else {
+        toast.error("Registered but auto login failed. Please login manually.");
+        router.push("/login");
+      }
+    } else {
+      toast.error(data.message || "There was an error, please try again");
     }
   }
 
@@ -172,7 +182,7 @@ export default function RegisterPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm text-gray-700">
-                    Confirm Passwrod
+                    Confirm Password
                   </FormLabel>
                   <FormControl className="">
                     <Input

@@ -4,16 +4,10 @@ import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/context/appContext";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 export default function CartModal() {
-  const { cart, handleRemoveItem } = useAppContext();
-
-  function turncateText(text: string, maxChars: number) {
-    if (text.length <= maxChars) return text;
-
-    return text.slice(0, maxChars) + "...";
-  }
+  const { cart, handleRemoveItem, turncateText } = useAppContext();
 
   if (!cart || !cart.data || cart?.data.products.length === 0) {
     return (

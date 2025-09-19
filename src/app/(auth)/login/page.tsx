@@ -128,7 +128,7 @@ export default function LoginPage() {
             href="/register"
             className="text-sm text-gray-600 hover:underline"
           >
-            Dont Have an account?{" "}
+            Don&#39;t Have an account?{" "}
             <span className="text-[#F35C7A]">Register</span>
           </Link>
           <br />
@@ -136,7 +136,7 @@ export default function LoginPage() {
             href="/forget-password"
             className="text-sm text-gray-600 hover:underline"
           >
-            Forget Password ?
+            Forgot Password ?
           </Link>
         </div>
       </div>

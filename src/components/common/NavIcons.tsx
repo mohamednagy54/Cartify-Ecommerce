@@ -10,20 +10,23 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import CartModal from "./CartModal";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppContext } from "@/context/appContext";
 
 export default function NavIcons({ status }: { status: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const { handleLoggingOut,cart } = useAppContext();
+  const { handleLoggingOut, cart } = useAppContext();
+  const pathname = usePathname();
 
   const router = useRouter();
 
   useEffect(() => {
     setIsProfileMenuOpen(false);
-  }, [status]);
+    setIsCartOpen(false);
+    setIsProfileMenuOpen(false);
+  }, [status, pathname]);
 
   function handleProfileClick() {
     if (status === "authenticated") {
@@ -35,7 +38,10 @@ export default function NavIcons({ status }: { status: string }) {
 
   return (
     <div className="flex items-center gap-4 xl:gap-6 relative">
-      <DropdownMenu>
+      <DropdownMenu
+        open={isProfileMenuOpen}
+        onOpenChange={setIsProfileMenuOpen}
+      >
         <DropdownMenuTrigger onClick={handleProfileClick}>
           <Image
             src="/profile.png"
@@ -74,9 +80,13 @@ export default function NavIcons({ status }: { status: string }) {
         onClick={() => setIsCartOpen((prev) => !prev)}
       >
         <Image src="/cart.png" alt="" width={22} height={22} />
-        <div className="absolute -top-4 -right-4 w-6 h-6 bg-[#F35C7A] text-white rounded-full flex items-center justify-center text-sm">
-          { cart?.data.products.length ?? 0}
-        </div>
+        {cart?.data.products.length !== 0 ? (
+          <div className="absolute -top-4 -right-4 w-6 h-6 bg-[#F35C7A] text-white rounded-full flex items-center justify-center text-sm">
+            {cart?.data.products.length ?? 0}
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       {isCartOpen && <CartModal />}
     </div>
