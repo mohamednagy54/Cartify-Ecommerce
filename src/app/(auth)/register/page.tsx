@@ -89,8 +89,6 @@ export default function RegisterPage() {
         redirect: false,
       });
 
-      console.log(loginRes);
-
       if (loginRes?.ok) {
         router.push("/");
       } else {
