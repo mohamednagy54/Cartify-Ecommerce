@@ -19,15 +19,28 @@ export default function CategorySlider({
     infinite: false,
     speed: 500,
     slidesToShow: 5,
-    slidesToScroll: 2,
+    slidesToScroll: 3,
     swipeToSlide: true,
     beforeChange: () => setIsDragging(true),
     afterChange: () => setTimeout(() => setIsDragging(false), 0),
+
     responsive: [
-      { breakpoint: 1280, settings: { slidesToShow: 4, slidesToScroll: 2 } },
-      { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 1 } },
-      { breakpoint: 768, settings: { slidesToShow: 2, slidesToScroll: 1 } },
-      { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
+      {
+        breakpoint: 1280,
+        settings: { slidesToShow: 4, slidesToScroll: 2 },
+      },
+      {
+        breakpoint: 1024,
+        settings: { slidesToShow: 3, slidesToScroll: 1 },
+      },
+      {
+        breakpoint: 768,
+        settings: { slidesToShow: 2, slidesToScroll: 1 },
+      },
+      {
+        breakpoint: 640,
+        settings: { slidesToShow: 1, slidesToScroll: 1 },
+      },
     ],
   };
 
@@ -45,7 +58,7 @@ export default function CategorySlider({
               onClick={handleClick}
               draggable={false}
             >
-              <div className="relative group bg-slate-100 w-full h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+              <div className="relative group bg-slate-100 w-[90vw] sm:w-[45vw] md:w-[30vw] lg:w-full h-[250px] sm:h-[300px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
                 <Image
                   src={cat.image}
                   alt={cat.name}
