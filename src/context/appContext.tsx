@@ -292,6 +292,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+
+
   async function handleLoggingOut() {
     try {
       await signOut({ redirect: true, callbackUrl: "/" });
@@ -301,6 +303,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       console.error(error);
     }
   }
+
+  
 
   async function handleGetUserOrders(userId: string | undefined) {
     try {

@@ -9,15 +9,15 @@ import Slider from "react-slick";
 export default function BrandsSlider({ brands }: { brands: BrandType[] }) {
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 4,
-    slidesToScroll: 1,
+    slidesToScroll: 3,
 
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
-      { breakpoint: 480, settings: { slidesToShow: 1 } },
+      { breakpoint: 768, settings: { slidesToShow: 2, centerMode: true } },
+      { breakpoint: 480, settings: { slidesToShow: 1, centerMode: true } },
     ],
     arrows: false,
     autoplay: true,
@@ -26,13 +26,13 @@ export default function BrandsSlider({ brands }: { brands: BrandType[] }) {
   return (
     <div className="py-6  ">
       {brands.length > 0 && (
-        <Slider {...settings} className="">
+        <Slider {...settings} className="brands-slider">
           {brands.map((brand: BrandType) => (
-            <div key={brand._id} className="mx-3">
+            <div key={brand._id} className="">
               <div className="flex items-center justify-center p-6 border bg-white   transition-transform hover:scale-105 cursor-pointer">
                 <Link
                   href={`/list?brand=${brand.slug}`}
-                  className="relative w-36 h-16  bg-white transition-transform hover:scale-105 cursor-pointer"
+                  className="relative w-full h-16  bg-white transition-transform hover:scale-105 cursor-pointer"
                 >
                   <Image
                     src={brand.image}
