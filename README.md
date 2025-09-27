@@ -29,7 +29,7 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-✨ Features
+## ✨ Features
 
 Authentication
 
@@ -85,7 +85,7 @@ State Management
 
 • Loading states for cart, wishlist, login, register, orders, etc.
 
-🛠️ Tech Stack
+## 🛠️ Tech Stack
 
 • Next.js
 
@@ -101,7 +101,7 @@ State Management
 
 • Git & GitHub
 
-📂 Pages Implemented
+## 📂 Pages Implemented
 
 - Home Page
 
