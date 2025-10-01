@@ -3,9 +3,12 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
-import ClientWrapper from "@/components/common/ClientWrapper";
 
 import { Providers } from "./providers";
+import { ProductType } from "@/types/products.type";
+import { getAllBrands, getAllCategories } from "@/ShopActions/ShopActions";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,15 +37,35 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // 🔹 Fetch Products
+  const res = await fetch(`https://ecommerce.routemisr.com/api/v1/products`, {
+    cache: "no-store",
+  });
+  const productsData = await res.json();
+  const products: ProductType[] = productsData.data || [];
+
+  const [brands, categories] = await Promise.all([
+    getAllBrands(),
+    getAllCategories(),
+  ]);
+
   return (
     <html lang="en">
       <body className={`${inter.className} overflow-x-hidden`}>
-        <Providers>
-          <Navbar />
-          <main className="min-h-screen">
-            <ClientWrapper>{children}</ClientWrapper>
-          </main>
-          <Footer />
+        <Providers
+          initialData={{
+            products,
+            cart: null,
+            wishlist: [],
+            brands,
+            categories,
+          }}
+        >
+          <Suspense fallback={<Loading />}>
+            <Navbar />
+            <main className="min-h-screen">{children}</main>
+            <Footer />
+          </Suspense>
         </Providers>
       </body>
     </html>

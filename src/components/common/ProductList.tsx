@@ -1,56 +1,44 @@
-import { ProductType } from "@/types/products.type";
+"use client";
 
-import React, { Suspense } from "react";
+import React from "react";
 import ProductListClient from "./ProductListClient";
 import ProductListGrid from "./ProductListGrid";
-import SkeletonCards from "./SkeletonCards";
+import { useAppContext } from "@/context/appContext";
 
 interface ProductListProps {
   limit?: number;
   filterType?: string;
-  searchParams?: string;
-  useContext?: boolean;
   variant?: "default" | "grid";
 }
 
-export default async function ProductList({
+export default function ProductList({
   limit,
   filterType,
-
-  useContext = false,
   variant = "default",
 }: ProductListProps) {
-  const queryParams = new URLSearchParams();
-  if (limit) queryParams.append("limit", limit.toString());
-  if (filterType) queryParams.append("sort", `-${filterType}`);
+  const { products } = useAppContext();
 
-  const res = await fetch(
-    `https://ecommerce.routemisr.com/api/v1/products${
-      queryParams.toString() ? `?${queryParams.toString()}` : ""
-    }`,
-    {
-      cache: "no-store",
-    }
-  );
+  let displayedProducts = [...products];
 
-  const data = await res.json();
+  if (filterType) {
+    displayedProducts.sort((a, b) => {
+      if (filterType === "ratingsAverage") {
+        return b.ratingsAverage - a.ratingsAverage;
+      }
+      if (filterType === "price") {
+        return b.price - a.price;
+      }
+      return 0;
+    });
+  }
 
-  const products: ProductType[] = data.data || [];
+  if (limit) {
+    displayedProducts = displayedProducts.slice(0, limit);
+  }
 
-  return (
-    <>
-      {variant === "grid" ? (
-        <Suspense fallback={<SkeletonCards />}>
-          <ProductListGrid initialProducts={products} useContext={useContext} />
-        </Suspense>
-      ) : (
-        <Suspense fallback={<SkeletonCards />}>
-          <ProductListClient
-            initialProducts={products}
-            useContext={useContext}
-          />
-        </Suspense>
-      )}
-    </>
-  );
+  if (variant === "grid") {
+    return <ProductListGrid initialProducts={displayedProducts} />;
+  }
+
+  return <ProductListClient initialProducts={displayedProducts} />;
 }

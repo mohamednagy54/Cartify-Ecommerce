@@ -6,27 +6,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { AiOutlineHeart } from "react-icons/ai";
 
-import React, { useEffect } from "react";
+import React from "react";
 
 import { FiShoppingCart } from "react-icons/fi";
 import { useSearchParams } from "next/navigation";
 import CounterProduct from "./CounterProduct";
 
 interface ProductListClientProps {
-  initialProducts: ProductType[];
-  search?: string;
-  useContext?: boolean;
+  initialProducts?: ProductType[];
 }
 
 export default function ProductListClient({
   initialProducts,
-  useContext = false,
 }: ProductListClientProps) {
   const {
-    filteredProducts,
-    setFilteredProducts,
-    setProducts,
-    searchValue,
     handleAddToCart,
     handleAddToWishlist,
     wishlist,
@@ -36,40 +29,62 @@ export default function ProductListClient({
     cart,
     handleCountOperations,
     loadingProductId,
+    products,
   } = useAppContext();
 
-  useEffect(() => {
-    if (useContext) {
-      setProducts(initialProducts);
-      setFilteredProducts(initialProducts);
-    }
-  }, [initialProducts, setProducts, setFilteredProducts, useContext]);
-
   const searchParams = useSearchParams();
-  const categoryName = searchParams.get("category");
-  const brandName = searchParams.get("brand");
 
-  const filtered = searchValue
-    ? (useContext ? filteredProducts : initialProducts).filter((p) =>
-        p.title.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    : useContext
-    ? filteredProducts
-    : initialProducts;
+  const categoryParam = searchParams.get("category");
+  const brandParam = searchParams.get("brand");
+  const minPrice = searchParams.get("min");
+  const maxPrice = searchParams.get("max");
+  const sort = searchParams.get("sort");
+  const searchParam = searchParams.get("q");
 
-  let finalFiltered = filtered;
+  let filtered = initialProducts || products;
 
-  if (categoryName) {
-    finalFiltered = filtered.filter(
-      (product) => product.category.slug === categoryName
-    );
-  } else if (brandName) {
-    finalFiltered = filtered.filter(
-      (product) => product.brand.slug === brandName
-    );
+  if (searchParam) {
+    filtered = filtered.filter((p) => p.slug.includes(searchParam));
+  }
+  if (brandParam && brandParam !== "all") {
+    filtered = filtered.filter((p) => p.brand.slug === brandParam);
   }
 
-  if (!finalFiltered || finalFiltered.length === 0) {
+  if (categoryParam && categoryParam !== "all") {
+    filtered = filtered.filter((p) => p.category.slug === categoryParam);
+  }
+
+  if (minPrice) {
+    filtered = filtered.filter((p) => p.price >= Number(minPrice));
+  }
+  if (maxPrice) {
+    filtered = filtered.filter((p) => p.price <= Number(maxPrice));
+  }
+
+  if (sort) {
+    switch (sort) {
+      case "asc price":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "desc price":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "asc lastUpdated":
+        filtered.sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+        break;
+      case "desc lastUpdated":
+        filtered.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        break;
+    }
+  }
+
+  if (!filtered || filtered.length === 0) {
     return (
       <div className="text-center py-20 text-gray-500">
         No products available at the moment
@@ -79,7 +94,7 @@ export default function ProductListClient({
 
   return (
     <div className="mt-12 flex gap-4 justify-start flex-wrap">
-      {finalFiltered?.map((product: ProductType) => {
+      {filtered?.map((product: ProductType) => {
         const { _id, imageCover, description, price, title, images } = product;
 
         const isWishlisted = wishlist.some((item) => item._id === product._id);

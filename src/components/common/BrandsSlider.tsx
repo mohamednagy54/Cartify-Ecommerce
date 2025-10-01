@@ -7,8 +7,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import "swiper/css";
+import { useAppContext } from "@/context/appContext";
 
-export default function BrandsSlider({ brands }: { brands: BrandType[] }) {
+export default function BrandsSlider() {
+
+  const { brands} = useAppContext()
+
+
   if (brands.length === 0) return null;
 
   return (

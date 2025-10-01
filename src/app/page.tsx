@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 import Link from "next/link";
-import BrandsList from "@/components/common/BrandsList";
 import DiagonalBanners from "@/components/common/DiagonalBanners";
 import ProductList from "@/components/common/ProductList";
 import CategoryList from "@/components/common/CategoryList";
 import SkeletonCards from "@/components/common/SkeletonCards";
 import SliderComponent from "@/components/common/SliderComponent";
+import BrandsSlider from "@/components/common/BrandsSlider";
 
 export default function Home() {
   return (
@@ -93,7 +93,7 @@ export default function Home() {
           Brands
         </h1>
 
-        <BrandsList />
+        <BrandsSlider />
       </div>
 
       <div className="py-24">
@@ -105,12 +105,7 @@ export default function Home() {
           Featured Products
         </h1>
         <Suspense fallback={<SkeletonCards />}>
-          <ProductList
-            limit={10}
-            filterType="ratingsAverage"
-            useContext={false}
-            variant="grid"
-          />{" "}
+          <ProductList limit={10} filterType="ratingsAverage" variant="grid" />{" "}
         </Suspense>
       </div>
 
@@ -129,12 +124,7 @@ export default function Home() {
           New Products
         </h1>
         <Suspense fallback={<SkeletonCards />}>
-          <ProductList
-            limit={4}
-            filterType="price"
-            useContext={false}
-            variant="default"
-          />
+          <ProductList limit={4} filterType="price" variant="default" />
         </Suspense>
       </div>
     </div>

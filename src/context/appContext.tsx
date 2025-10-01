@@ -29,22 +29,19 @@ import {
 } from "@/WishlistActions/WishlistActions";
 import { getUserToken } from "@/utils/getUserToken";
 
+import { BrandType } from "@/types/brand.type";
+import { CategoryType } from "@/types/categories.type";
+
 interface AppContextType {
-  searchValue: string;
-  setSearchValue: (value: string) => void;
   cart: CartType | null;
   setCart: React.Dispatch<React.SetStateAction<CartType | null>>;
   orders: OrdersType[];
   setOrders: React.Dispatch<React.SetStateAction<OrdersType[]>>;
+  brands: BrandType[];
+  categories: CategoryType[];
   handleRemoveItem: (productId: string) => void;
   handleAddToCart: (productId: string) => void;
-  filterByBrand: (brandName: string) => void;
-  filterByCategory: (categoryName: string) => void;
-  filterBySort: (value: string) => void;
-  filterByPrice: (value: number | undefined, type: "min" | "max") => void;
 
-  filteredProducts: ProductType[];
-  setFilteredProducts: React.Dispatch<React.SetStateAction<ProductType[]>>;
   products: ProductType[];
   setProducts: React.Dispatch<React.SetStateAction<ProductType[]>>;
   handleLoggingOut: () => void;
@@ -54,11 +51,7 @@ interface AppContextType {
   formatPrice: (value: number) => string;
   wishlist: WishlistItem[];
   setWishlist: React.Dispatch<React.SetStateAction<WishlistItem[]>>;
-  priceFilter: { min?: number; max?: number };
-  setPriceFilter: React.Dispatch<
-    React.SetStateAction<{ min?: number; max?: number }>
-  >;
-  sortValue: string;
+
   cartLoading: string | null;
   wishlistLoading: string | null;
   globalLoading: boolean;
@@ -78,18 +71,30 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [searchValue, setSearchValue] = useState("");
-  const [products, setProducts] = useState<ProductType[]>([]);
-  const [cart, setCart] = useState<CartType | null>(null);
+export const AppProvider = ({
+  children,
+  initialData,
+}: {
+  children: ReactNode;
+  initialData: {
+    products: ProductType[];
+    cart: CartType | null;
+    wishlist: WishlistItem[];
+    brands: BrandType[];
+    categories: CategoryType[];
+  };
+}) => {
+  const [products, setProducts] = useState<ProductType[]>(initialData.products);
+  const [cart, setCart] = useState<CartType | null>(initialData.cart);
   const [orders, setOrders] = useState<OrdersType[]>([]);
-  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<ProductType[]>([]);
-  const [sortValue, setSortValue] = useState<string>("");
-  const [priceFilter, setPriceFilter] = useState<{
-    min?: number;
-    max?: number;
-  }>({});
+  const [wishlist, setWishlist] = useState<WishlistItem[]>(
+    initialData.wishlist
+  );
+  const [brands, setBrands] = useState<BrandType[]>(initialData.brands);
+  const [categories, setCategories] = useState<CategoryType[]>(
+    initialData.categories
+  );
+
   const [globalLoading, setGlobalLoading] = useState(false);
   const [cartPageLoading, setCartPageLoading] = useState(false);
   const [wishlistPageLoading, setWishlistPageLoading] = useState(false);
@@ -154,7 +159,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       setCart(null);
       setWishlist([]);
     }
-  }, [status, initUserData]);
+  }, [status]);
 
   async function fetchCart() {
     try {
@@ -292,8 +297,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-
-
   async function handleLoggingOut() {
     try {
       await signOut({ redirect: true, callbackUrl: "/" });
@@ -303,8 +306,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
       console.error(error);
     }
   }
-
-  
 
   async function handleGetUserOrders(userId: string | undefined) {
     try {
@@ -365,89 +366,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     }).format(value);
   }
 
-  // Filteration methods
-  function filterByBrand(brandName: string) {
-    if (brandName === "all") {
-      setFilteredProducts(products);
-      setSortValue("");
-    } else {
-      setFilteredProducts(
-        products.filter((product) => product.brand.slug === brandName)
-      );
-
-      setSortValue("");
-    }
-  }
-  function filterByCategory(categoryName: string) {
-    if (categoryName === "all") {
-      setFilteredProducts(products);
-      setSortValue("");
-    } else {
-      setFilteredProducts(
-        products.filter((product) => product.category.slug === categoryName)
-      );
-      setSortValue("");
-    }
-  }
-
-  function filterByPrice(value: number | undefined, type: "min" | "max") {
-    const newFilter = { [type]: value };
-    setPriceFilter(newFilter);
-
-    if (!newFilter.min && !newFilter.max) {
-      setFilteredProducts(products);
-      return;
-    }
-
-    const filtered = products.filter((product) => {
-      if (newFilter.min != null && product.price < newFilter.min) return false;
-      if (newFilter.max != null && product.price > newFilter.max) return false;
-      return true;
-    });
-
-    setFilteredProducts(filtered);
-  }
-
-  function filterBySort(value: string) {
-    setSortValue(value);
-    let sortedProducts = [...filteredProducts];
-
-    switch (value) {
-      case "asc price":
-        sortedProducts.sort((a, b) => a.price - b.price);
-
-        break;
-      case "desc price":
-        sortedProducts.sort((a, b) => b.price - a.price);
-
-        break;
-      case "asc lastUpdated":
-        sortedProducts.sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-
-        break;
-      case "desc lastUpdated":
-        sortedProducts.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-
-        break;
-
-      default:
-        sortedProducts = [...products];
-    }
-
-    setFilteredProducts(sortedProducts);
-  }
-
   return (
     <AppContext.Provider
       value={{
-        searchValue,
-        setSearchValue,
         cart,
         setCart,
         handleRemoveItem,
@@ -463,15 +384,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         wishlist,
         setWishlist,
         handleAddToWishlist,
-        filterByBrand,
-        filteredProducts,
-        setFilteredProducts,
-        filterByCategory,
-        filterBySort,
-        sortValue,
-        filterByPrice,
-        priceFilter,
-        setPriceFilter,
         cartLoading,
         wishlistLoading,
         globalLoading,
@@ -483,6 +395,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         handleCountOperations,
         loadingProductId,
         setLoadingProductId,
+        brands,
+        categories,
       }}
     >
       {children}

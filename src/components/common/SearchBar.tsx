@@ -1,35 +1,47 @@
 "use client";
 
-import { useAppContext } from "@/context/appContext";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function SearchBar() {
-  const { setSearchValue } = useAppContext();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const [query, setQuery] = useState(searchParams.get("q") || "");
+
+  useEffect(() => {
+    setQuery(searchParams.get("q") || "");
+  }, [searchParams]);
 
   function handleSearch(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget);
+    const params = new URLSearchParams(searchParams.toString());
 
-    const name = (formData.get("name") as string) || "";
+    if (!query) {
+      params.delete("q");
+    } else {
+      params.set("q", query);
+    }
 
-    setSearchValue(name);
+    router.push(`/list?${params.toString()}`);
   }
 
   return (
     <form
-      onChange={handleSearch}
+      onSubmit={handleSearch}
       className="flex items-center justify-between gap-4 bg-gray-100 p-2 rounded-md flex-1 mt-8"
     >
       <input
         type="text"
-        name="name"
+        name="q"
+        value={query}
         placeholder="Search"
         className="bg-transparent flex-1 outline-none"
+        onChange={(e) => setQuery(e.target.value)}
       />
-      <button className="cursor-pointer">
+      <button type="submit" className="cursor-pointer">
         <Image src="/search.png" alt="" width={16} height={16} />
       </button>
     </form>

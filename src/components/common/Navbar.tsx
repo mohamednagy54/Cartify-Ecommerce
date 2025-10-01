@@ -17,6 +17,8 @@ import NavIcons from "./NavIcons";
 import { useAppContext } from "@/context/appContext";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+ 
+
 
 const navLinks = [
   { href: "/", label: "HomePage" },

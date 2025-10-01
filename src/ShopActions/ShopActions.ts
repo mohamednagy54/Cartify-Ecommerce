@@ -1,7 +1,9 @@
 "use server";
 
 export async function getAllBrands() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/brands`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/brands`, {
+    next: { revalidate: 4600 },
+  });
 
   const data = await res.json();
 
@@ -14,7 +16,10 @@ export async function getAllBrands() {
 }
 export async function getAllCategories() {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/categories`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/categories`,
+    {
+      next: { revalidate: 4600 },
+    }
   );
 
   const data = await res.json();
