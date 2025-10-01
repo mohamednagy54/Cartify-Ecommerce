@@ -47,6 +47,8 @@ Products & Filtering
 
 • Dedicated single product page with multiple images.
 
+• All Filteration is working with query params
+
 Shopping Cart
 
 • Add/Remove products with real-time updates from the server.
