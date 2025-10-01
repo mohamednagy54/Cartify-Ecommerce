@@ -31,95 +31,68 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## ✨ Features
 
-Authentication
+### 🔐 Authentication
 
-• Login, Register, Logout using NextAuth.
+- Login, Register, Logout using **NextAuth**.
+- Secure session handling with redirects for unauthorized users.
+- Auto-login after registration.
 
-• Secure session handling with redirects for unauthorized users.
+### 🛍 Products & Filtering
 
-• Auto login after registration.
+- Dynamic product listing with **search**, **brand/category**, and **price filters**.
+- Sorting (ascending/descending).
+- Dedicated **single product page** with multiple images.
+- All filtering works with **query parameters**.
 
-Products & Filtering
+### 🛒 Shopping Cart
 
-• Dynamic product listing with search, brand/category, and price filters.
+- Add/Remove products with **real-time updates** from the server.
+- Quantity management with **+ / - buttons**.
+- Loading spinners to prevent multiple clicks.
+- **Cart modal** with total calculation & product indicators.
+- Dynamic **cart badge** (appears only if items exist).
 
-• Sorting (ascending/descending).
+### ❤️ Wishlist
 
-• Dedicated single product page with multiple images.
+- Add/Remove products with a **heart icon**.
+- Wishlist synced with server & loading state.
 
-• All Filteration is working with query params
+### 📦 Orders
 
-Shopping Cart
+- Display user orders fetched from the server.
+- Single order view with **order details**.
 
-• Add/Remove products with real-time updates from the server.
+### 🎨 UI/UX
 
-• Quantity management with + / - buttons.
+- Fully **responsive design** for all screen sizes.
+- Hover animations & smooth transitions.
+- Toast notifications for success/error.
 
-• Loading spinners to prevent multiple clicks.
+### ⚡ State Management
 
-• Cart modal with total calculation & product indicators.
-
-• Dynamic cart badge (appears only if items exist).
-
-Wishlist
-
-• Add/Remove products with a heart icon.
-
-• Wishlist sync with server & loading state.
-
-Orders
-
-• Display user orders fetched from the server.
-
-• Single order view with details.
-
-UI/UX
-
-• Fully responsive design for all screen sizes.
-
-• Hover animations & smooth transitions.
-
-• Toast notifications for success/error.
-
-State Management
-
-• Custom Context API for products, cart, wishlist, orders, filters.
-
-• Loading states for cart, wishlist, login, register, orders, etc.
+- Custom **Context API** for products, cart, wishlist, orders, filters.
+- Loading states for cart, wishlist, login, register, orders, etc.
 
 ## 🛠️ Tech Stack
 
-• Next.js
-
-• React.js
-
-• Tailwind CSS / Bootstrap
-
-• NextAuth
-
-• Axios
-
-• React Hook Form
-
-• Git & GitHub
+- **Next.js**
+- **React.js**
+- **Tailwind CSS / Bootstrap**
+- **NextAuth**
+- **Axios**
+- **React Hook Form**
+- **Git & GitHub**
 
 ## 📂 Pages Implemented
 
-- Home Page
-
-- All Products Page with filters & pagination
-
-- Product Details Page
-
-- Cart Page / Modal
-
-- Wishlist Page
-
-- Profile Page (user info + orders)
-
-- Auth Pages: Login, Register, Reset Password, Verify Email
-
-- Checkout Page (in progress)
+- **Home Page**
+- **All Products Page** with filters & pagination
+- **Product Details Page**
+- **Cart Page / Modal**
+- **Wishlist Page**
+- **Profile Page** (user info + orders)
+- **Auth Pages**: Login, Register, Reset Password, Verify Email
+- **Checkout Page** cash on delivery | credit card
 
 ## Deploy on Vercel
 
